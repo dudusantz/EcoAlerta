@@ -13,7 +13,7 @@ O projeto foi construído utilizando a arquitetura **MVC (Model-View-Controller)
 * **Frontend:** EJS (Embedded JavaScript), CSS3 e Bootstrap
 * **Uploads:** Multer (Gestão de imagens)
 * **Autenticação:** Sessões e Criptografia de senhas
-* * **APIs e Integrações:** Geolocalização (GPS do Navegador), Nodemailer (Envio de E-mails) e Boxicons
+* **APIs e Integrações:** Geolocalização (GPS do Navegador), Nodemailer (Envio de E-mails) e Boxicons
 
 ---
 
@@ -31,7 +31,8 @@ Abra o terminal e rode:
 
 ```bash
 git clone [https://github.com/dudusantz/EcoAlerta.git](https://github.com/dudusantz/EcoAlerta.git)
-
+```
+```
 cd EcoAlerta
 ```
 ### 3. Instalar Dependências
@@ -48,7 +49,7 @@ Por segurança, o arquivo de configurações não é enviado para o GitHub. Crie
 # Configuração do Banco de Dados
 ```DB_HOST=localhost
 DB_USER=root
-DB_PASS=SUA_SENHA_AQUI
+DB_PASSWORD=SUA_SENHA_AQUI
 DB_NAME=ecoalerta_db
 (Substitua SUA_SENHA_AQUI pela senha do seu MySQL)
 ```
@@ -108,8 +109,9 @@ Executando o Projeto
 Após configurar tudo, inicie o servidor:
 
 Bash
-
+```
 node server.js
+```
 O sistema estará disponível em: http://localhost:3000
 
 ## Autor
