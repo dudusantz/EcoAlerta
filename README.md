@@ -1,21 +1,3 @@
-Com certeza! Você está certíssimo: node server.js é o comando universal e funciona sempre, independente de como o package.json está configurado.
-
-Aqui está o README.md completo, corrigido e formatado.
-
-O que eu fiz:
-
-Corrigi o comando de iniciar: Agora está node server.js.
-
-Arrumei a formatação: Todos os códigos (Bash, SQL, Env) estão dentro das caixinhas pretas certas para não quebrar no GitHub.
-
-Link do Clone: Deixei o link limpo para não dar erro ao colar no terminal.
-
-Seção de Autores: Atualizei com o LinkedIn e o espaço para a dupla.
-
-Pode copiar tudo abaixo e colar no seu arquivo:
-
-Markdown
-
 # EcoAlerta
 
 O **EcoAlerta** é uma plataforma web desenvolvida para facilitar a denúncia de crimes e irregularidades ambientais. O sistema conecta cidadãos conscientes a órgãos fiscalizadores, permitindo o envio de denúncias (anônimas ou identificadas) com fotos e localização, além de oferecer um painel administrativo para gestão e resolução dos casos.
