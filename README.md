@@ -13,6 +13,7 @@ O projeto foi construído utilizando a arquitetura **MVC (Model-View-Controller)
 * **Frontend:** EJS (Embedded JavaScript), CSS3 e Bootstrap
 * **Uploads:** Multer (Gestão de imagens)
 * **Autenticação:** Sessões e Criptografia de senhas
+* * **APIs e Integrações:** Geolocalização (GPS do Navegador), Nodemailer (Envio de E-mails) e Boxicons
 
 ---
 
@@ -39,11 +40,6 @@ Bash
 npm install
 4. Configurar Variáveis de Ambiente (.env)
 Por segurança, o arquivo de configurações não é enviado para o GitHub. Crie um arquivo chamado .env na raiz do projeto e preencha com os dados do seu banco MySQL:
-
-Snippet de código
-
-# Configuração do Servidor
-PORT=3000
 
 # Configuração do Banco de Dados
 DB_HOST=localhost
