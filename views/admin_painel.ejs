@@ -9,7 +9,7 @@
     <style>
         /* Variáveis de Cores e Tema */
         :root {
-            --primary-color: #1C563F; 
+            --primary-color: #1C563F;
             --secondary-color: #76C25A; 
             --bg-color: #E2E3E5; 
             --card-bg: #ffffff; 
@@ -23,7 +23,7 @@
         }
 
         body.dark-theme {
-            --primary-color: #76C25A; 
+            --primary-color: #76C25A;
             --secondary-color: #1C563F; 
             --bg-color: #121212; 
             --card-bg: #1f1f1f;
@@ -38,7 +38,7 @@
 
         /* Estilos Globais */
         body { 
-            font-family: 'Poppins', sans-serif; 
+            font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color); 
             padding: 20px;
             color: var(--text-color);
@@ -48,15 +48,15 @@
         
         /* Cabeçalho e Ações */
         h1 { 
-            color: var(--primary-color); 
+            color: var(--primary-color);
             border-bottom: 2px solid var(--primary-color); 
             padding-bottom: 10px; 
             margin-bottom: 30px;
-            text-align: center; 
+            text-align: center;
         }
 
         .header-admin { 
-            display: flex; 
+            display: flex;
             justify-content: space-between; 
             align-items: center; 
             margin-bottom: 30px;
@@ -74,7 +74,20 @@
 
         /* Listagem de Denúncias */
         .denuncia-list { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-        .denuncia-card { background: var(--card-bg); padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid; position: relative; color: var(--denuncia-text); }
+        
+        .denuncia-card { 
+            background: var(--card-bg); 
+            padding: 20px;
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            border-left: 5px solid; 
+            position: relative; 
+            color: var(--denuncia-text);
+            /* Proteção extra para layout */
+            overflow: hidden; 
+            word-wrap: break-word;
+        }
+        
         .denuncia-card h3 { color: var(--text-color); }
         
         /* Indicadores de Status */
@@ -83,7 +96,8 @@
         .denuncia-card.PENDENTE { border-left-color: var(--pending-color); }
         .denuncia-card.RESOLVIDA { border-left-color: var(--resolved-color); }
 
-        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; color: white; font-weight: 600; font-size: 0.8em; margin-bottom: 10px; }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; color: white;
+        font-weight: 600; font-size: 0.8em; margin-bottom: 10px; }
         .status-badge.PENDENTE { background-color: var(--pending-color); }
         .status-badge.APROVADA { background-color: var(--secondary-color); }
         .status-badge.REJEITADA { background-color: #f44336; }
@@ -159,12 +173,23 @@
             <% } else { %>
                 <% denuncias.forEach(denuncia => { %>
                     <div class="denuncia-card <%= denuncia.status %>" id="denuncia-<%= denuncia.id %>">
+                        
                         <span class="status-badge <%= denuncia.status %>"><%= denuncia.status %></span>
                         <h3><%= denuncia.titulo %> (ID: <%= denuncia.id %>)</h3>
                         <p>Enviado por: <strong><%= denuncia.nome_exibicao %></strong> | <%= new Date(denuncia.data_envio).toLocaleDateString('pt-BR') %></p>
+                        
                         <div class="denuncia-details">
                             <p>Localização: <%= denuncia.localizacao %></p>
-                            <p>Descrição: <%= denuncia.descricao.substring(0, 80) %>...</p>
+                            
+                            <p title="<%= denuncia.descricao %>">
+                                Descrição: 
+                                <% if (denuncia.descricao.length > 100) { %>
+                                    <%= denuncia.descricao.substring(0, 100) %>...
+                                <% } else { %>
+                                    <%= denuncia.descricao %>
+                                <% } %>
+                            </p>
+
                             <a href="/denuncia/detalhes/<%= denuncia.id %>" style="color: var(--link-color); font-weight: 500;">Ver Detalhes e Arquivos</a>
                             
                             <% if (denuncia.status === 'PENDENTE') { %>
@@ -201,7 +226,6 @@
     
     <script>
         let currentDenunciaId = null;
-
         /* Gerenciamento de Tema (Dark/Light Mode) */
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
@@ -249,7 +273,6 @@
         /* Funções de Atualização de Status (API) */
         async function updateStatus(denunciaId, newStatus, rejectionReason = '') {
             const feedbackElement = document.getElementById(`feedback-${denunciaId}`);
-            
             if (newStatus === 'REJEITADA' && !rejectionReason.trim()) {
                 document.getElementById('rejectionError').textContent = 'O motivo da rejeição é obrigatório.';
                 return;
@@ -270,13 +293,13 @@
                 });
 
                 if (response.ok) { 
-                    window.location.reload(); 
+                    window.location.reload();
                 } else {
                     const errorText = await response.text();
                     alert(`Falha na Moderação: ${errorText}`);
                 }
             } catch (error) { 
-                alert('Erro de conexão.'); 
+                alert('Erro de conexão.');
             }
         }
 
@@ -287,15 +310,15 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: denunciaId })
                 });
-                
+
                 if (response.ok) { 
-                    window.location.reload(); 
+                    window.location.reload();
                 } else {
                     const errorText = await response.text();
                     alert(`Falha na Resolução: ${errorText}`);
                 }
             } catch (error) { 
-                alert('Erro de conexão.'); 
+                alert('Erro de conexão.');
             }
         }
 

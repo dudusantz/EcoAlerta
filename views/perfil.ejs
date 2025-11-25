@@ -10,7 +10,7 @@
     <style>
         /* Variáveis de Tema */
         :root {
-            --primary-color: #1C563F; 
+            --primary-color: #1C563F;
             --secondary-color: #76C25A; 
             --background-color: #E2E3E5; 
             --dark-color: #333; 
@@ -25,7 +25,7 @@
 
         /* Tema Escuro */
         body.dark-theme {
-            --primary-color: #76C25A; 
+            --primary-color: #76C25A;
             --secondary-color: #1C563F;
             --background-color: #121212; 
             --dark-color: #E0E0E0; 
@@ -115,20 +115,20 @@
         }
         
         #btn-mudar-senha {
-            background-color: var(--logout-bg); 
-            color: white;a
+            background-color: var(--logout-bg);
+            color: white;
             margin-right: 10px;
         }
         #btn-mudar-senha:hover { 
-            background-color: #b71c1c; 
+            background-color: #b71c1c;
         }
         
         #btn-toggle-edit {
-            background-color: var(--secondary-color); 
+            background-color: var(--secondary-color);
             color: var(--dark-color);
         }
         #btn-toggle-edit:hover { 
-            background-color: var(--primary-color); 
+            background-color: var(--primary-color);
             color: white; 
         }
 
@@ -152,7 +152,8 @@
             transition: background-color 0.3s;
             width: 100%;
         }
-        .btn-update-perfil:hover { background-color: #12402e; }
+        .btn-update-perfil:hover { background-color: #12402e;
+        }
 
         /* Botão de Tema */
         .theme-toggle-button {
@@ -165,11 +166,12 @@
             padding: 5px;
             transition: color 0.3s;
         }
-        .theme-toggle-button:hover { color: var(--secondary-color); }
+        .theme-toggle-button:hover { color: var(--secondary-color);
+        }
 
         /* Estilos dos Modais */
         .modal { 
-            display: none; 
+            display: none;
             position: fixed; 
             z-index: 1001; 
             left: 0;
@@ -179,28 +181,32 @@
             overflow: auto; 
             background-color: rgba(0,0,0,0.8); 
             display: flex; 
-            align-items: center; 
+            align-items: center;
             justify-content: center; 
         }
         .modal-content { 
-            background-color: var(--card-bg); 
+            background-color: var(--card-bg);
             margin: 0; 
             padding: 30px; 
             border: 1px solid var(--border-color); 
             width: 80%; 
             max-width: 450px; 
             border-radius: 10px; 
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3); 
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
             text-align: center; 
             color: var(--text-color);
             position: relative;
             z-index: 1002;
         }
-        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .close-btn:hover, .close-btn:focus { color: var(--text-color); text-decoration: none; cursor: pointer; }
+        .close-btn { color: #aaa;
+            float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover, .close-btn:focus { color: var(--text-color);
+            text-decoration: none; cursor: pointer; }
         
-        .message-success { color: var(--primary-color) !important; font-weight: 600 !important; }
-        .message-error { color: #d32f2f !important; }
+        .message-success { color: var(--primary-color) !important;
+            font-weight: 600 !important; }
+        .message-error { color: #d32f2f !important;
+        }
 
         .confirm-actions {
             display: flex;
@@ -219,16 +225,18 @@
         }
         
         #confirm-ok-btn {
-            background-color: var(--logout-bg); 
+            background-color: var(--logout-bg);
             color: white;
         }
-        #confirm-ok-btn:hover { background-color: #b71c1c; }
+        #confirm-ok-btn:hover { background-color: #b71c1c;
+        }
 
         #confirm-cancel-btn {
-            background-color: var(--input-bg); 
+            background-color: var(--input-bg);
             color: var(--text-color);
         }
-        #confirm-cancel-btn:hover { background-color: var(--border-color); }
+        #confirm-cancel-btn:hover { background-color: var(--border-color);
+        }
 
         /* Lista de Denúncias */
         .denuncia-item {
@@ -241,34 +249,63 @@
             align-items: center;
             flex-wrap: wrap;
             background-color: var(--card-bg);
+            overflow: hidden;
         }
-        .denuncia-details { width: 70%; }
-        .denuncia-actions { width: 25%; text-align: right; }
+        .denuncia-details { 
+            width: 70%;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            padding-right: 10px;
+        }
+        .denuncia-actions { width: 25%; text-align: right;
+        }
         
-        .status-badge { display: inline-block; padding: 5px 10px; border-radius: 5px; color: white; font-weight: 600; font-size: 0.9em; margin-right: 10px; }
-        .status-badge.PENDENTE { background-color: #ff9800; }
-        .status-badge.APROVADA { background-color: var(--secondary-color); }
-        .status-badge.REJEITADA { background-color: #f44336; }
-        .status-badge.RESOLVIDA { background-color: var(--resolved-color); }
+        .status-badge { display: inline-block;
+            padding: 5px 10px; border-radius: 5px; color: white; font-weight: 600; font-size: 0.9em; margin-right: 10px;
+        }
+        .status-badge.PENDENTE { background-color: #ff9800;
+        }
+        .status-badge.APROVADA { background-color: var(--secondary-color);
+        }
+        .status-badge.REJEITADA { background-color: #f44336;
+        }
+        .status-badge.RESOLVIDA { background-color: var(--resolved-color);
+        }
 
-        .btn-cancelar-denuncia { background-color: var(--logout-bg); color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; text-decoration: none; font-size: 0.9em; }
-        .btn-cancelar-denuncia:hover { background-color: #b71c1c; }
+        .btn-cancelar-denuncia { background-color: var(--logout-bg); color: white; padding: 8px 12px; border: none;
+            border-radius: 5px; cursor: pointer; font-weight: 500; text-decoration: none; font-size: 0.9em;
+        }
+        .btn-cancelar-denuncia:hover { background-color: #b71c1c;
+        }
         
         /* Navegação Inferior */
-        .action-buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
-        .action-buttons a { padding: 10px 20px; border-radius: 20px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: flex; align-items: center; }
+        .action-buttons { display: flex;
+            justify-content: space-between; align-items: center; margin-top: 30px; }
+        .action-buttons a { padding: 10px 20px;
+            border-radius: 20px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: flex; align-items: center;
+        }
         
-        .btn-back { background-color: var(--secondary-color); color: var(--dark-color); }
-        .btn-back:hover { background-color: var(--primary-color); color: white; }
+        .btn-back { background-color: var(--secondary-color);
+            color: var(--dark-color); }
+        .btn-back:hover { background-color: var(--primary-color); color: white;
+        }
         
-        .btn-logout { background-color: var(--logout-bg); color: white; padding: 10px 25px; }
-        .btn-logout:hover { background-color: #d32f2f; }
+        .btn-logout { background-color: var(--logout-bg);
+            color: white; padding: 10px 25px; }
+        .btn-logout:hover { background-color: #d32f2f;
+        }
     </style>
 </head>
 <body id="profile-body">
 
     <div class="container">
         <h1><i class='bx bxs-user-circle' style="font-size: 1.2em; vertical-align: middle;"></i> Meu Perfil</h1>
+
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div style="background-color: rgba(211, 47, 47, 0.1); color: #d32f2f; padding: 10px; border-radius: 5px; border: 1px solid #d32f2f; margin-bottom: 20px; text-align: center;">
+                <%= message %>
+            </div>
+        <% } %>
 
         <div class="user-info">
             <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 20px;">
@@ -290,15 +327,15 @@
                     const yyyy = dataNascObj.getFullYear();
                     const mm = String(dataNascObj.getMonth() + 1).padStart(2, '0');
                     const dd = String(dataNascObj.getDate()).padStart(2, '0');
-                    const dataInputFormat = `${yyyy}-${mm}-${dd}`; 
+                    const dataInputFormat = `${yyyy}-${mm}-${dd}`;
                 %>
                 <div class="form-group-perfil">
                     <label for="nomeCompleto">Nome Completo:</label>
-                    <input type="text" id="nomeCompleto" name="nomeCompleto" value="<%= usuario.nomeCompleto %>" disabled required>
+                    <input type="text" id="nomeCompleto" name="nomeCompleto" value="<%= usuario.nomeCompleto %>" maxlength="100" disabled required>
                 </div>
                 <div class="form-group-perfil">
                     <label for="email">E-mail:</label>
-                    <input type="email" id="email" name="email" value="<%= usuario.email %>" disabled required> 
+                    <input type="email" id="email" name="email" value="<%= usuario.email %>" maxlength="100" disabled required> 
                 </div>
                 <div class="form-group-perfil">
                     <label>CPF:</label>
@@ -322,7 +359,16 @@
                     <div class="denuncia-details">
                         <h3><a href="/denuncia/detalhes/<%= denuncia.id %>" style="color: var(--text-color); text-decoration: none; font-weight: 600;"><%= denuncia.titulo %></a></h3>
                         <p><span class="status-badge <%= denuncia.status %>"><%= denuncia.status %></span> Enviada em: <%= new Date(denuncia.data_envio).toLocaleDateString('pt-BR') %></p>
-                        <p style="font-size: 0.9em; margin-top: 5px;"><%= denuncia.descricao.substring(0, 80) %>...</p>
+                        
+                        <p style="font-size: 0.9em; margin-top: 5px;">
+                            <% 
+                                let desc = denuncia.descricao || '';
+                                if(desc.length > 80) {
+                                    desc = desc.substring(0, 80) + '...';
+                                }
+                            %>
+                            <%= desc %>
+                        </p>
                     </div>
                     <div class="denuncia-actions">
                         <form method="POST" action="/denuncia/cancelar/<%= denuncia.id %>">

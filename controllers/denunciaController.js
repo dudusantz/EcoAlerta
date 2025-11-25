@@ -42,6 +42,14 @@ exports.submitDenuncia = async (req, res) => {
     try {
         const { titulo, descricao, localizacao, anonimo } = req.body;
 
+        // --- VALIDAÇÃO DE TAMANHO ---
+        if (titulo.length > 50) {
+            return res.status(400).send('Erro: O título deve ter no máximo 50 caracteres.');
+        }
+        if (descricao.length > 100) {
+            return res.status(400).send('Erro: A descrição deve ter no máximo 100 caracteres.');
+        }
+
         if (!req.files || req.files.length === 0) {
             return res.status(400).send('Foto ou vídeo obrigatório.');
         }

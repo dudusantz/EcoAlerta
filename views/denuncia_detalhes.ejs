@@ -3,164 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes da Denúncia: <%= denuncia.titulo %></title>
+    <title>Detalhes da Denúncia | EcoAlerta</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+    
     <style>
-        /* Variáveis de Tema (Padrão/Light) */
+        /* Variáveis de Tema */
         :root {
-            --primary-color: #1C563F; 
+            --primary-color: #1C563F;
             --secondary-color: #76C25A; 
-            --background-color: #E2E3E5; 
-            --dark-color: #333; 
+            --bg-color: #E2E3E5; 
             --card-bg: #ffffff; 
+            --text-color: #333; 
+            --light-text: #666; 
             --border-color: #e0e0e0;
-            --pending-color: #ff9800;
+            --dark-color: #1C563F; 
             --resolved-color: #28a745;
-            --link-color: blue;
-            --info-bg: #f0f0f0; 
-        }
-        
-        /* Tema Escuro */
-        body.dark-theme {
-            --primary-color: #76C25A; 
-            --secondary-color: #1C563F; 
-            --background-color: #121212; 
-            --dark-color: #E0E0E0; 
-            --card-bg: #1f1f1f;
-            --border-color: #333333;
-            --pending-color: #ffb74d;
-            --resolved-color: #4CAF50;
-            --link-color: #71b9ff;
-            --info-bg: #2a2a2a; 
-        }
-        
-        /* Estilos Gerais */
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background-color: var(--background-color); 
-            padding: 40px; 
-            color: var(--dark-color); 
-            transition: background-color 0.3s, color 0.3s;
+            --input-bg: #f9f9f9;
         }
 
-        /* Container de Detalhes */
-        .details-container { 
-            max-width: 800px; 
-            margin: 0 auto; 
-            background: var(--card-bg); 
-            padding: 30px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
-            border: 1px solid var(--border-color); 
+        body.dark-theme {
+            --primary-color: #76C25A;
+            --secondary-color: #1C563F;
+            --bg-color: #121212; 
+            --card-bg: #1f1f1f;
+            --text-color: #E0E0E0;
+            --light-text: #B0B0B0;
+            --border-color: #333333;
+            --dark-color: #E0E0E0; 
+            --resolved-color: #4CAF50;
+            --input-bg: #2a2a2a;
+        }
+
+        /* Estilos Globais */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
             position: relative;
         }
 
-        /* Cabeçalho e Informações */
-        h1 { 
-            color: var(--primary-color); 
-            border-bottom: 2px solid var(--secondary-color); 
-            padding-bottom: 10px; 
-            margin-bottom: 20px; 
-            font-size: 2em; 
+        /* Cabeçalho */
+        h1 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 15px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            overflow-wrap: break-word; /* Proteção para títulos longos */
         }
-        .data-item p { margin: 10px 0; }
-        .data-item strong { color: var(--primary-color); }
-        
-        /* Galeria de Arquivos */
-        .file-gallery { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 15px; 
-            margin-top: 20px; 
-        }
-        .file-item { 
-            border: 1px solid var(--border-color);
-            border-radius: 5px; 
-            overflow: hidden; 
-            cursor: pointer;
-        }
-        .file-item img, .file-item video { 
-            width: 100%; 
-            height: 150px; 
-            object-fit: cover; 
-            display: block; 
-        }
-        
-        .file-info { 
-            padding: 10px; 
-            text-align: center; 
-            font-size: 0.9em; 
-            background-color: var(--info-bg);
-            color: var(--text-color);
-        }
-        
-        /* Botões de Navegação */
-        .btn-back { 
-            margin-top: 30px; 
-            display: inline-block; 
-            padding: 10px 20px; 
-            background-color: var(--border-color); 
-            color: var(--dark-color); 
-            text-decoration: none; 
-            border-radius: 20px; 
-            transition: background-color 0.2s;
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
             font-weight: 600;
+            color: white;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .status-badge.PENDENTE { background-color: #ff9800; }
+        .status-badge.APROVADA { background-color: var(--secondary-color); }
+        .status-badge.REJEITADA { background-color: #f44336; }
+        .status-badge.RESOLVIDA { background-color: var(--resolved-color); }
+
+        /* CORREÇÃO DO BUG DE TEXTO */
+        .description-box {
+            background-color: var(--input-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: var(--text-color);
+            
+            /* Estas 3 linhas resolvem o problema do texto vazando */
+            white-space: pre-wrap;       /* Respeita os parágrafos */
+            word-wrap: break-word;       /* Quebra palavras longas */
+            overflow-wrap: anywhere;     /* Quebra qualquer coisa que estoure */
+        }
+
+        /* Metadados (Autor, Data, Local) */
+        .meta-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: var(--light-text);
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 15px;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+        }
+        .meta-item i {
+            margin-right: 5px;
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+
+        /* Galeria de Mídia */
+        .media-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .media-item {
+            position: relative;
+            padding-top: 100%; /* Aspect Ratio quadrado */
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+        .media-item:hover {
+            transform: scale(1.03);
+        }
+        .media-item img, .media-item video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Botões de Navegação */
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background-color: var(--input-bg);
+            transition: background-color 0.3s;
         }
         .btn-back:hover {
-             background-color: var(--primary-color);
-             color: white;
+            background-color: var(--border-color);
         }
         
-        /* Indicadores de Status */
-        .status-badge { 
-            background-color: <%= denuncia.status === 'APROVADA' ? '#76C25A' : 
-                          denuncia.status === 'REJEITADA' ? '#f44336' : 
-                          denuncia.status === 'PENDENTE' ? '#ff9800' : 
-                          'var(--resolved-color)' %>;
-            color: white; 
-            padding: 5px 10px; 
-            border-radius: 5px; 
-            font-weight: 600; 
-            display: inline-block;
-        }
-
-        .file-preview {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            text-align: center;
-        }
-
-        /* Botão de Tema Flutuante */
+        /* Botão de Tema */
         .theme-toggle-float {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: transparent;
+            border: none;
             font-size: 1.5em;
             color: var(--primary-color);
             cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s, background-color 0.3s;
-        }
-        .theme-toggle-float:hover {
-            transform: scale(1.1);
-            color: var(--secondary-color);
         }
 
-        /* Modal Lightbox */
+        /* Lightbox (Para ver imagens grandes) */
         #lightboxModal {
-            display: none; 
+            display: none;
             position: fixed;
-            z-index: 9999; 
+            z-index: 9999;
             left: 0;
             top: 0;
             width: 100%;
@@ -168,137 +199,98 @@
             background-color: rgba(0, 0, 0, 0.9);
             align-items: center;
             justify-content: center;
-            flex-direction: column;
         }
-        #lightboxModal.visible { display: flex; }
         #lightboxContent {
             max-width: 90%;
             max-height: 90%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         #lightboxContent img, #lightboxContent video {
-            display: block;
             max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
+            max-height: 90vh;
+            display: block;
+            margin: 0 auto;
         }
         .close-lightbox {
             position: absolute;
             top: 20px;
-            right: 35px;
+            right: 40px;
             color: #fff;
             font-size: 40px;
             font-weight: bold;
             cursor: pointer;
-            transition: color 0.3s;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 50%;
-            padding: 5px 15px;
-            line-height: 1;
         }
-        .close-lightbox:hover { color: #ccc; }
     </style>
 </head>
 <body>
 
-    <button id="theme-toggle" class="theme-toggle-float" title="Alternar Tema"></button>
+    <div class="container">
+        <button id="theme-toggle" class="theme-toggle-float" title="Alternar Tema"></button>
 
-    <div class="details-container">
+        <span class="status-badge <%= denuncia.status %>"><%= denuncia.status %></span>
+        
         <h1><%= denuncia.titulo %></h1>
-        <p><span class="status-badge"><%= denuncia.status %></span></p>
 
-        <div class="data-item">
-            <p><strong>Descrição:</strong> <%= denuncia.descricao %></p>
-            <p><strong>Localização:</strong> <%= denuncia.localizacao %></p>
-            <p><strong>Enviado por:</strong> <%= denuncia.nome_exibicao || 'Usuário Anônimo' %></p>
-            <p><strong>Data de Envio:</strong> <%= new Date(denuncia.data_envio).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></p>
+        <div class="meta-info">
+            <div class="meta-item">
+                <i class='bx bxs-user'></i> 
+                <span><%= denuncia.nome_exibicao || 'Anônimo' %></span>
+            </div>
+            <div class="meta-item">
+                <i class='bx bxs-calendar'></i> 
+                <span><%= new Date(denuncia.data_envio).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span>
+            </div>
+            <div class="meta-item">
+                <i class='bx bxs-map'></i> 
+                <span><%= denuncia.localizacao %></span>
+            </div>
         </div>
 
-        <h2 style="margin-top: 40px; color: var(--dark-color);">Arquivos Anexados</h2>
+        <h3 style="color: var(--primary-color); margin-bottom: 10px;">Descrição Detalhada:</h3>
         
-        <div class="file-gallery">
-            <% 
-                const nomesArquivos = denuncia.nome_arquivo ? denuncia.nome_arquivo.split(';') : [];
-                let arquivosExibidos = false;
-                
-                nomesArquivos.forEach(fileName => {
-                    if (!fileName.trim()) return; 
+        <div class="description-box">
+            <%= denuncia.descricao %>
+        </div>
 
-                    arquivosExibidos = true;
+        <% 
+            const arquivos = denuncia.nome_arquivo ? denuncia.nome_arquivo.split(';') : [];
+        %>
+        
+        <% if (arquivos.length > 0) { %>
+            <h3 style="color: var(--primary-color); margin-top: 30px;">Evidências (Fotos/Vídeos):</h3>
+            <div class="media-gallery">
+                <% arquivos.forEach(fileName => { 
                     const extension = fileName.split('.').pop().toLowerCase();
                     const isVideo = ['mp4', 'mov', 'webm', 'avi'].includes(extension);
-                    const mediaUrl = `/uploads/${fileName}`;
-                    
-                    const videoType = isVideo ? `video/${extension}` : ''; 
-            %>
-                <div class="file-item" onclick="openLightbox('<%= mediaUrl %>', '<%= isVideo ? 'video' : 'image' %>')">
-                    <% if (isVideo) { %>
-                        <video controls class="file-preview">
-                            <source src="<%= mediaUrl %>" type="<%= videoType %>">
-                            Seu navegador não suporta a tag de vídeo.
-                        </video>
-                    <% } else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) { %>
-                        <img src="<%= mediaUrl %>" alt="<%= fileName %>" class="file-preview">
-                    <% } else { %>
-                        <div class="file-preview" style="background-color: #b0bec5; color: #333;">Arquivo Desconhecido: <%= extension %></div>
-                    <% } %>
-                    <div class="file-info"><%= fileName %></div>
-                </div>
-            <% }); %>
+                    const mediaUrl = `/uploads/${fileName}`; 
+                %>
+                    <div class="media-item" onclick="openLightbox('<%= mediaUrl %>', '<%= isVideo ? 'video' : 'image' %>')">
+                        <% if (isVideo) { %>
+                            <video src="<%= mediaUrl %>" muted></video>
+                            <i class='bx bx-play-circle' style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:3em; color:white; text-shadow: 0 2px 5px rgba(0,0,0,0.5);"></i>
+                        <% } else { %>
+                            <img src="<%= mediaUrl %>" alt="Evidência">
+                        <% } %>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
 
-            <% if (!arquivosExibidos) { %>
-                <p>Nenhum arquivo anexado a esta denúncia.</p>
+        <div class="action-buttons">
+            <% if (isAdmin) { %>
+                <a href="/admin" class="btn-back"><i class='bx bx-arrow-back'></i> Voltar ao Painel Admin</a>
+            <% } else { %>
+                <a href="/feed" class="btn-back"><i class='bx bx-arrow-back'></i> Voltar ao Feed</a>
             <% } %>
         </div>
-
-        <a href="<%= isAdmin ? '/admin' : '/perfil' %>" class="btn-back">
-            <i class='bx bx-arrow-back'></i> 
-            <%= isAdmin ? 'Voltar ao Painel Admin' : 'Voltar ao Perfil' %>
-        </a>
     </div>
 
     <div id="lightboxModal" onclick="closeLightbox()">
-        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <span class="close-lightbox">&times;</span>
         <div id="lightboxContent" onclick="event.stopPropagation()"></div>
     </div>
-    
+
     <script>
-        /* Controle do Lightbox */
-        const lightboxModal = document.getElementById('lightboxModal');
-        const lightboxContent = document.getElementById('lightboxContent');
-        
-        function openLightbox(src, type) {
-            if(event) event.stopPropagation(); 
-            lightboxContent.innerHTML = ''; 
-            
-            if (type === 'image') {
-                lightboxContent.innerHTML = `<img src="${src}" alt="Mídia da Denúncia">`;
-            } else if (type === 'video') {
-                lightboxContent.innerHTML = `<video controls autoplay src="${src}" style="max-width: 100%; max-height: 90vh;"></video>`;
-            }
-            
-            lightboxModal.classList.add('visible');
-            lightboxModal.style.display = 'flex';
-        }
-
-        function closeLightbox() {
-            const video = lightboxContent.querySelector('video');
-            if (video) video.pause();
-            lightboxModal.classList.remove('visible');
-            lightboxModal.style.display = 'none';
-        }
-        
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && lightboxModal.classList.contains('visible')) {
-                closeLightbox();
-            }
-        });
-
-        /* Gerenciamento de Tema (Dark/Light Mode) */
+        /* Gerenciamento de Tema */
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
         const darkModeClass = 'dark-theme';
@@ -316,11 +308,7 @@
         }
 
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') { 
-            applyTheme(true); 
-        } else { 
-            applyTheme(false); 
-        }
+        if (savedTheme === 'dark') { applyTheme(true); } else { applyTheme(false); }
 
         themeToggle.addEventListener('click', () => {
             const isDark = body.classList.contains(darkModeClass);
@@ -331,6 +319,31 @@
                 applyTheme(true);
                 localStorage.setItem('theme', 'dark');
             }
+        });
+
+        /* Lightbox */
+        const lightboxModal = document.getElementById('lightboxModal');
+        const lightboxContent = document.getElementById('lightboxContent');
+
+        function openLightbox(src, type) {
+            lightboxContent.innerHTML = '';
+            if (type === 'image') {
+                lightboxContent.innerHTML = `<img src="${src}" alt="Mídia Grande">`;
+            } else {
+                lightboxContent.innerHTML = `<video controls autoplay src="${src}" style="max-width:100%; max-height:90vh;"></video>`;
+            }
+            lightboxModal.style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            const video = lightboxContent.querySelector('video');
+            if (video) video.pause();
+            lightboxModal.style.display = 'none';
+        }
+
+        // Atalho de teclado ESC para fechar
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeLightbox();
         });
     </script>
 </body>

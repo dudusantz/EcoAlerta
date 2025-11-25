@@ -293,12 +293,12 @@
 
             <div class="form-group">
                 <label for="titulo">Título da Denúncia:</label>
-                <input type="text" id="titulo" name="titulo" required maxlength="100" placeholder="Resumo do problema (ex: Lixo em terreno baldio)"> 
+                <input type="text" id="titulo" name="titulo" required maxlength="50" placeholder="Resumo breve (Ex: Lixo na calçada - Máx 50)"> 
             </div>
 
             <div class="form-group">
                 <label for="descricao">Descrição Detalhada:</label>
-                <textarea id="descricao" name="descricao" required placeholder="Descreva o que aconteceu, pontos de referência, etc."></textarea>
+                <textarea id="descricao" name="descricao" required maxlength="100" placeholder="Descreva o problema em poucas palavras... (Máx. 100 caracteres)"></textarea>
             </div>
             
             <div class="form-group">
@@ -345,7 +345,7 @@
     </div>
 
     <script>
-        /* Gerenciamento de Tema */
+        /* 1. Gerenciamento de Tema */
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
         const darkModeClass = 'dark-theme';
@@ -377,7 +377,7 @@
             }
         });
 
-        /* Inicialização de Elementos */
+        /* 2. Inicialização de Elementos do DOM */
         const localizacaoInput = document.getElementById('localizacao');
         const btnGps = document.getElementById('btn-gps');
         const imagemInput = document.getElementById('imagemInput');
@@ -385,26 +385,27 @@
         const denunciaForm = document.getElementById('denunciaForm');
         const submitBtn = document.getElementById('btn-enviar');
         
-        // Lista para controlar os arquivos acumulados
+        // Variável global para armazenar arquivos
         let arquivosAcumulados = []; 
         const LIMITE_ARQUIVOS = 5;
 
-        /* Renderização da lista de arquivos */
+        /* 3. Função para Renderizar a Lista de Arquivos */
         function renderFileList() {
             if (arquivosAcumulados.length === 0) {
                 fileListDisplay.innerHTML = '<span style="font-style: italic; opacity: 0.7;">Nenhum arquivo selecionado.</span>';
                 return;
             }
             
+            // Cria a lista HTML
             let html = `<p style="font-weight:600; margin-bottom:5px;">Arquivos Prontos (${arquivosAcumulados.length}/${LIMITE_ARQUIVOS}):</p><ul style="list-style-type: none; padding-left: 0;">`;
             
             arquivosAcumulados.forEach((file, index) => {
                 const sizeFormatted = (file.size / (1024*1024)).toFixed(2) + ' MB';
                 html += `
                     <li style="font-size: 0.9em; display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border-color);">
-                        <div style="display:flex; flex-direction:column; overflow:hidden;">
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${file.name}</span>
-                            <span style="font-size: 0.75em; color: var(--light-text);">${sizeFormatted}</span>
+                        <div style="display:flex; flex-direction:column; overflow:hidden; margin-right:10px;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px;">${file.name}</span>
+                            <span style="font-size: 0.75em; color: var(--text-color); opacity: 0.7;">${sizeFormatted}</span>
                         </div>
                         <button type="button" onclick="removeFile(${index})" title="Remover" style="color: var(--error-color); background: none; border: none; cursor: pointer; font-size: 1.4em; font-weight: bold;">&times;</button>
                     </li>`;
@@ -413,46 +414,41 @@
             fileListDisplay.innerHTML = html;
         }
 
-        /* Função para remover arquivo da lista acumulada */
+        /* 4. Função Global para Remover Arquivo (chamada pelo onclick) */
         window.removeFile = function(index) {
             arquivosAcumulados.splice(index, 1);
             updateInputFiles();
             renderFileList();
         };
 
-        /* Sincroniza arquivosAcumulados com o input real para envio */
+        /* 5. Sincroniza a lista acumulada com o input HTML real */
         function updateInputFiles() {
             const dataTransfer = new DataTransfer();
             arquivosAcumulados.forEach(file => dataTransfer.items.add(file));
             imagemInput.files = dataTransfer.files;
         }
 
-        /* Listener de Upload (Com verificação de duplicatas e limite) */
+        /* 6. Listener de Upload (Monitora seleção de arquivos) */
         if (imagemInput) {
             imagemInput.addEventListener('change', (e) => {
                 const newFiles = Array.from(e.target.files);
-                let duplicateCount = 0;
-
+                
                 newFiles.forEach(newFile => {
-                    // 1. Verifica limite total
+                    // Verifica limite
                     if (arquivosAcumulados.length >= LIMITE_ARQUIVOS) {
                         return; 
                     }
-
-                    // 2. Verifica duplicata
+                    // Verifica duplicidade
                     const exists = arquivosAcumulados.some(existing => 
                         existing.name === newFile.name && existing.size === newFile.size
                     );
-
                     if (!exists) {
                         arquivosAcumulados.push(newFile);
-                    } else {
-                        duplicateCount++;
                     }
                 });
 
-                if (arquivosAcumulados.length === LIMITE_ARQUIVOS && newFiles.length > 0) {
-                    alert(`Limite máximo de ${LIMITE_ARQUIVOS} arquivos atingido.`);
+                if (arquivosAcumulados.length >= LIMITE_ARQUIVOS && newFiles.length > 0) {
+                    // Feedback silencioso ou visual se desejar
                 }
 
                 updateInputFiles();
@@ -460,12 +456,12 @@
             });
         }
 
-        /* Lógica do GPS */
+        /* 7. Lógica do GPS */
         if (btnGps && localizacaoInput) {
             btnGps.addEventListener('click', () => {
                 if (navigator.geolocation) {
                     const originalContent = btnGps.innerHTML;
-                    btnGps.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
+                    btnGps.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'; // Loading
                     btnGps.disabled = true;
 
                     navigator.geolocation.getCurrentPosition(
@@ -473,7 +469,7 @@
                             const { latitude, longitude } = position.coords;
                             localizacaoInput.value = `${latitude}, ${longitude}`;
                             
-                            // Restaura texto original
+                            // Restaura o texto original
                             btnGps.innerHTML = originalContent;
                             btnGps.disabled = false;
                         },
@@ -490,7 +486,7 @@
             });
         }
 
-        /* Previne envio duplo */
+        /* 8. Previne envio duplo do formulário */
         if (denunciaForm) {
             denunciaForm.addEventListener('submit', function() {
                 if (denunciaForm.checkValidity()) {
