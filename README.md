@@ -28,7 +28,7 @@ Siga os passos abaixo para rodar o projeto na sua máquina local.
 ### 2. Clonar o Repositório
 Abra o terminal e rode:
 
-```bash
+bash
 git clone [https://github.com/dudusantz/EcoAlerta.git](https://github.com/dudusantz/EcoAlerta.git)
 cd EcoAlerta
 3. Instalar Dependências
@@ -110,8 +110,8 @@ Bash
 node server.js
 O sistema estará disponível em: http://localhost:3000
 
-Autor
+## Autor
 
-* **Eduardo Vinicius**
-  * Desenvolvedor Full Stack
-  * [Perfil no GitHub](https://github.com/dudusantz) | [Perfil no LinkedIn](https://www.linkedin.com/in/eduardo-vinicius-35bb56344/)
+**Eduardo Vinicius**
+[Perfil no GitHub](https://github.com/dudusantz)
+[Perfil no LinkedIn](https://www.linkedin.com/in/eduardo-vinicius-35bb56344/)
