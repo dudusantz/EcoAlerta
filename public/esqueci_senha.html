@@ -3,72 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
-    <link rel="stylesheet" href="/css/styles.css">
     <title>Recuperar Senha | EcoAlerta</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <link rel="stylesheet" href="css/styles.css">
+
     <style>
-        /* Modal de Sucesso Customizado */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
-        .modal-content { background: rgba(90, 119, 47, 0.95); border: 2px solid rgba(255, 255, 255, 0.2); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; color: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.3s ease-out; }
-        .modal-icon { font-size: 50px; color: #fff; margin-bottom: 15px; }
-        .modal-title { font-size: 1.5em; font-weight: 700; margin-bottom: 10px; }
-        .btn-modal { background: #fff; color: #1C563F; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.3s; }
-        .btn-modal:hover { background: #f0f0f0; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        /* Estilos do Modal de Confirmação */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 35px;
+            border-radius: 15px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease-out;
+            color: #333;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 3.5rem;
+            color: #28a745; /* Verde Sucesso */
+            margin-bottom: 15px;
+        }
+
+        .modal h2 {
+            color: #1C563F;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .modal p {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* BOTÃO ENTENDIDO */
+        #btn-entendido {
+            background-color: #1C563F; /* Verde Tema Escuro */
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* HOVER CORRIGIDO - Agora combina com o ícone */
+        #btn-entendido:hover {
+            background-color: #28a745; /* Verde do Ícone (Sucesso) */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3); /* Sombra esverdeada sutil */
+        }
     </style>
 </head>
 <body>
 
-    <main class="container">
-        <div class="logo-container glass-logo-box">
-            <img src="/img/EcoAlerta.png" alt="Logo EcoAlerta" class="login-logo">
+    <div class="container">
+        <div class="glass-logo-box" style="margin: 0 auto 20px auto;">
+            <img src="img/EcoAlerta.png" alt="EcoAlerta" class="login-logo">
         </div>
 
-        <form id="forgotForm"> 
-            <h1>Recuperar Senha</h1>
-            <p style="text-align: center; margin-bottom: 25px; font-size: 0.9em; color: #ddd;">
-                Digite seu e-mail abaixo. Se a conta existir, enviaremos um link para você redefinir sua senha.
-            </p>
-            
+        <h1>Esqueci minha Senha</h1>
+        <p style="text-align:center; font-size:0.9em; margin-bottom:25px;">
+            Digite seu e-mail para receber o link de redefinição.
+        </p>
+
+        <form id="resetForm">
             <div class="input-box">
-                <input type="email" id="emailInput" required placeholder="Seu E-mail Cadastrado">
-                <i class="bx bxs-envelope"></i>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail cadastrado" required>
+                <i class='bx bxs-envelope'></i>
             </div>
 
-            <button type="submit" class="login">Enviar Link</button>
+            <button type="submit" class="login" id="btn-enviar">Enviar Link</button>
             
             <div class="register-link">
-                <a href="login.html">Voltar para o Login</a>
+                <p><a href="login.html">Voltar para o Login</a></p>
             </div>
         </form>
-    </main>
+        
+        <div id="feedback" style="text-align:center; margin-top:15px; font-weight:500;"></div>
+    </div>
 
-    <div id="successModal" class="modal-overlay">
+    <div id="successModal" class="modal">
         <div class="modal-content">
             <i class='bx bxs-check-circle modal-icon'></i>
-            <div class="modal-title">Verifique seu E-mail</div>
-            <div class="modal-text" id="modalMessage">
-                Se o e-mail estiver cadastrado, você receberá um link com instruções em instantes.
-            </div>
-            <button class="btn-modal" onclick="window.location.href = 'login.html'">Entendido</button>
+            <h2>E-mail Enviado!</h2>
+            <p>Verifique sua caixa de entrada (e spam).<br>Enviamos um link para você redefinir sua senha.</p>
+            <button id="btn-entendido" onclick="closeModal()">Entendido</button>
         </div>
     </div>
 
     <script>
+        const form = document.getElementById('resetForm');
+        const feedback = document.getElementById('feedback');
+        const btnEnviar = document.getElementById('btn-enviar');
         const modal = document.getElementById('successModal');
-        const form = document.getElementById('forgotForm');
-        const btnSubmit = form.querySelector('button');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('emailInput').value;
-            const originalText = btnSubmit.innerText;
+            
+            const originalText = btnEnviar.innerText;
+            btnEnviar.innerText = "Enviando...";
+            btnEnviar.disabled = true;
+            feedback.innerText = "";
+            feedback.style.color = "#fff";
 
-            // Feedback Visual: Bloqueia botão durante requisição
-            btnSubmit.innerText = "Enviando...";
-            btnSubmit.disabled = true;
-            btnSubmit.style.opacity = "0.7";
+            const email = document.getElementById('email').value;
 
             try {
                 const response = await fetch('/forgot-password', {
@@ -76,20 +144,37 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
                 });
-                
-                const data = await response.json();
-                
-                // Exibe Modal de Sucesso independente se o email existe (Segurança)
-                modal.style.display = 'flex';
 
+                const data = await response.text();
+
+                if (response.ok) {
+                    modal.style.display = 'flex'; 
+                    form.reset();
+                } else {
+                    feedback.style.color = "#ff4d4d";
+                    feedback.innerText = data || "Erro ao enviar e-mail.";
+                }
             } catch (error) {
-                alert('Erro de conexão.');
+                console.error('Erro:', error);
+                feedback.style.color = "#ff4d4d";
+                feedback.innerText = "Erro de conexão. Tente novamente.";
             } finally {
-                btnSubmit.innerText = originalText;
-                btnSubmit.disabled = false;
-                btnSubmit.style.opacity = "1";
+                btnEnviar.innerText = originalText;
+                btnEnviar.disabled = false;
             }
         });
+
+        function closeModal() {
+            modal.style.display = 'none';
+            window.location.href = 'login.html';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
     </script>
+
 </body>
 </html>

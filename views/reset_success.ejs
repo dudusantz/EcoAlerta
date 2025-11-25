@@ -8,37 +8,56 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
     
-    <link rel="stylesheet" href="/styles.css"> 
+    <link rel="stylesheet" href="/css/styles.css"> 
 
     <style>
-        /* Layout do conteúdo de sucesso */
+        /* Ajuste para centralizar verticalmente, caso o CSS principal falhe */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Garante o fundo do cartão branco/transparente igual ao login */
         .success-content {
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
+            /* Fundo estilo vidro suave para combinar com o tema */
+            background-color: rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
-        /* Ícone de feedback */
         .success-icon {
             font-size: 4rem;
-            color: #28a745;
+            color: #fff; /* Branco para destacar no fundo verde */
             margin-bottom: 15px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            padding: 10px;
+            padding: 15px;
         }
         
-        /* Tipografia */
-        .container h1 {
+        .success-content h1 {
             margin-bottom: 10px;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
         }
-        .container p {
-            color: #ddd;
+        .success-content p {
+            color: #eee;
             margin-bottom: 30px;
+            font-family: 'Poppins', sans-serif;
         }
         
-        /* Botão de ação */
+        /* Botão branco padrão do seu tema */
         .btn-login {
             display: flex;
             justify-content: center;
@@ -51,32 +70,46 @@
             color: #333;
             font-weight: 600;
             transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .btn-login:hover {
-            background-color: rgba(255,255,255,0.2);
-            color: #fff;
-            border: 2px solid rgba(255,255,255,0.5);
+            background-color: rgba(255,255,255,0.8);
+            transform: translateY(-2px);
+        }
+
+        .logo-container {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .login-logo {
+            width: 100px;
+            height: auto;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <main class="container">
-        <div class="success-content">
-            <div class="logo-container glass-logo-box">
-                <img src="/EcoAlerta.png" alt="EcoAlerta" class="login-logo">
-            </div>
-
-            <i class='bx bxs-check-circle success-icon'></i>
-
-            <h1>Sucesso!</h1>
-            <p>Sua senha foi alterada corretamente.</p>
-
-            <a href="/login.html" class="btn-login">
-                Fazer Login
-            </a>
+    <div class="success-content">
+        <div class="logo-container">
+            <img src="/img/EcoAlerta.png" alt="EcoAlerta" class="login-logo">
         </div>
-    </main>
+
+        <i class='bx bxs-check-circle success-icon'></i>
+
+        <h1>Sucesso!</h1>
+
+        <p>Sua senha foi alterada corretamente.</p>
+
+        <a href="/login.html" class="btn-login">
+            Fazer Login
+        </a>
+    </div>
 
 </body>
 </html>

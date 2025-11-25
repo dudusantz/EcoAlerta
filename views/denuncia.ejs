@@ -383,9 +383,11 @@
         const imagemInput = document.getElementById('imagemInput');
         const fileListDisplay = document.getElementById('fileListDisplay');
         const denunciaForm = document.getElementById('denunciaForm');
-        const feedbackElement = document.getElementById('submissionFeedback');
         const submitBtn = document.getElementById('btn-enviar');
+        
+        // Lista para controlar os arquivos acumulados
         let arquivosAcumulados = []; 
+        const LIMITE_ARQUIVOS = 5;
 
         /* Renderização da lista de arquivos */
         function renderFileList() {
@@ -394,12 +396,17 @@
                 return;
             }
             
-            let html = '<p style="font-weight:600; margin-bottom:5px;">Arquivos Prontos:</p><ul style="list-style-type: none; padding-left: 0;">';
+            let html = `<p style="font-weight:600; margin-bottom:5px;">Arquivos Prontos (${arquivosAcumulados.length}/${LIMITE_ARQUIVOS}):</p><ul style="list-style-type: none; padding-left: 0;">`;
+            
             arquivosAcumulados.forEach((file, index) => {
+                const sizeFormatted = (file.size / (1024*1024)).toFixed(2) + ' MB';
                 html += `
                     <li style="font-size: 0.9em; display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border-color);">
-                        <span>${file.name}</span>
-                        <button type="button" onclick="removeFile(${index})">&times;</button>
+                        <div style="display:flex; flex-direction:column; overflow:hidden;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${file.name}</span>
+                            <span style="font-size: 0.75em; color: var(--light-text);">${sizeFormatted}</span>
+                        </div>
+                        <button type="button" onclick="removeFile(${index})" title="Remover" style="color: var(--error-color); background: none; border: none; cursor: pointer; font-size: 1.4em; font-weight: bold;">&times;</button>
                     </li>`;
             });
             html += '</ul>';
@@ -420,15 +427,36 @@
             imagemInput.files = dataTransfer.files;
         }
 
-        /* Listener de Upload */
+        /* Listener de Upload (Com verificação de duplicatas e limite) */
         if (imagemInput) {
             imagemInput.addEventListener('change', (e) => {
                 const newFiles = Array.from(e.target.files);
-                if (newFiles.length > 0) {
-                    arquivosAcumulados = [...arquivosAcumulados, ...newFiles];
-                    updateInputFiles();
-                    renderFileList();
+                let duplicateCount = 0;
+
+                newFiles.forEach(newFile => {
+                    // 1. Verifica limite total
+                    if (arquivosAcumulados.length >= LIMITE_ARQUIVOS) {
+                        return; 
+                    }
+
+                    // 2. Verifica duplicata
+                    const exists = arquivosAcumulados.some(existing => 
+                        existing.name === newFile.name && existing.size === newFile.size
+                    );
+
+                    if (!exists) {
+                        arquivosAcumulados.push(newFile);
+                    } else {
+                        duplicateCount++;
+                    }
+                });
+
+                if (arquivosAcumulados.length === LIMITE_ARQUIVOS && newFiles.length > 0) {
+                    alert(`Limite máximo de ${LIMITE_ARQUIVOS} arquivos atingido.`);
                 }
+
+                updateInputFiles();
+                renderFileList();
             });
         }
 
@@ -437,8 +465,7 @@
             btnGps.addEventListener('click', () => {
                 if (navigator.geolocation) {
                     const originalContent = btnGps.innerHTML;
-                    // Mostra carregamento temporário
-                    btnGps.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'; 
+                    btnGps.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
                     btnGps.disabled = true;
 
                     navigator.geolocation.getCurrentPosition(
@@ -446,7 +473,7 @@
                             const { latitude, longitude } = position.coords;
                             localizacaoInput.value = `${latitude}, ${longitude}`;
                             
-                            // Restaura o texto original "GPS" imediatamente após sucesso
+                            // Restaura texto original
                             btnGps.innerHTML = originalContent;
                             btnGps.disabled = false;
                         },
@@ -459,6 +486,16 @@
                     );
                 } else {
                     alert('Geolocalização não é suportada pelo seu navegador.');
+                }
+            });
+        }
+
+        /* Previne envio duplo */
+        if (denunciaForm) {
+            denunciaForm.addEventListener('submit', function() {
+                if (denunciaForm.checkValidity()) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Enviando...';
                 }
             });
         }
