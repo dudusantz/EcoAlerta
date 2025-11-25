@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senha Alterada | EcoAlerta</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+    
+    <link rel="stylesheet" href="/styles.css"> 
+
+    <style>
+        /* Layout do conteúdo de sucesso */
+        .success-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Ícone de feedback */
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            padding: 10px;
+        }
+        
+        /* Tipografia */
+        .container h1 {
+            margin-bottom: 10px;
+        }
+        .container p {
+            color: #ddd;
+            margin-bottom: 30px;
+        }
+        
+        /* Botão de ação */
+        .btn-login {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            width: 100%;
+            height: 50px;
+            background-color: #fff;
+            border-radius: 40px;
+            color: #333;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            background-color: rgba(255,255,255,0.2);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <div class="success-content">
+            <div class="logo-container glass-logo-box">
+                <img src="/EcoAlerta.png" alt="EcoAlerta" class="login-logo">
+            </div>
+
+            <i class='bx bxs-check-circle success-icon'></i>
+
+            <h1>Sucesso!</h1>
+            <p>Sua senha foi alterada corretamente.</p>
+
+            <a href="/login.html" class="btn-login">
+                Fazer Login
+            </a>
+        </div>
+    </main>
+
+</body>
+</html>

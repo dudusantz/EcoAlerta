@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed de Denúncias | EcoAlerta</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+    
+    <style>
+        /* Variáveis de Tema */
+        :root {
+            --primary-color: #1C563F; 
+            --secondary-color: #76C25A; 
+            --bg-color: #E2E3E5; 
+            --card-bg: #ffffff; 
+            --text-color: #333; 
+            --light-text: #666; 
+            --border-color: #e0e0e0;
+            --logout-bg: #f44336;
+            --dark-color: #1C563F; 
+            --resolved-color: #28a745;
+        }
+
+        /* Tema Escuro */
+        body.dark-theme {
+            --primary-color: #76C25A; 
+            --secondary-color: #1C563F;
+            --bg-color: #121212; 
+            --card-bg: #1f1f1f;
+            --text-color: #E0E0E0;
+            --light-text: #B0B0B0;
+            --border-color: #333333;
+            --logout-bg: #d32f2f;
+            --dark-color: #E0E0E0; 
+            --resolved-color: #4CAF50;
+        }
+
+        /* Estilos Globais */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* Cabeçalho e Navegação */
+        .header {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            position: fixed; 
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .feed-title {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .action-buttons-topo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header .action-link {
+            padding: 8px 15px; 
+            border-radius: 25px; 
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        
+        .header .admin-link {
+            background-color: var(--primary-color);
+            color: white;
+            margin-right: 15px !important; 
+        }
+        .header .admin-link:hover { background-color: var(--secondary-color); color: var(--text-color); }
+
+        .header .profile-link {
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+        }
+        .header .profile-link:hover { background-color: var(--primary-color); color: white; }
+
+        .header .logout-link {
+            background-color: var(--logout-bg); 
+            color: white;
+        }
+        .header .logout-link:hover { background-color: #d32f2f; }
+        
+        /* Container do Feed */
+        .feed-container {
+            max-width: 800px;
+            width: 95%;
+            margin: 100px auto 20px auto;
+            padding: 0;
+        }
+
+        /* Cards de Denúncia */
+        .denuncia-card {
+            background: var(--card-bg);
+            padding: 25px; 
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+        .denuncia-card:hover { transform: translateY(-3px); }
+        
+        .denuncia-card h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Mídia e Galeria */
+        .denuncia-media {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto; 
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .media-thumbnail-wrapper {
+            cursor: pointer;
+            flex-shrink: 0;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .media-thumbnail-wrapper img, .media-thumbnail-wrapper video {
+            width: 100% !important; 
+            height: 100% !important;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .denuncia-card strong { color: var(--dark-color); }
+
+        .denuncia-info {
+            font-size: 0.95em;
+            color: var(--light-text);
+            border-top: 1px dashed var(--border-color);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .denuncia-info strong span {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Botão de Tema */
+        .theme-toggle-button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.5em;
+            cursor: pointer;
+            margin-left: 15px;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+        .theme-toggle-button:hover { color: var(--secondary-color); }
+        
+        .status-badge.RESOLVIDA {
+            background-color: var(--resolved-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.75em;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        /* Botão Flutuante de Ação */
+        .btn-nova-denuncia-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary-color);
+            color: white !important;
+            padding: 15px 25px;
+            border-radius: 50px; 
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            z-index: 900;
+        }
+        .btn-nova-denuncia-float:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+        .btn-nova-denuncia-float i {
+            margin-right: 8px;
+            font-size: 1.3em;
+        }
+
+        /* Modal Lightbox */
+        #lightboxModal {
+            display: none; 
+            position: fixed;
+            z-index: 9999; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #lightboxModal.visible { display: flex; }
+        #lightboxContent {
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #lightboxContent img, #lightboxContent video {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain; 
+        }
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            padding: 0 12px;
+            line-height: 1.5;
+        }
+        .close-lightbox:hover { color: #ccc; }
+    </style>
+</head>
+<body>
+    
+    <div class="header">
+        <div class="feed-title">Feed de Denúncias</div>
+        
+        <div class="action-buttons-topo">
+            <% if (isAdmin === 1) { %>
+                <a href="/admin" class="action-link admin-link">
+                    <i class='bx bxs-shield-alt'></i> Painel Admin
+                </a>
+            <% } %>
+
+            <a href="/perfil" class="action-link profile-link">
+                <i class='bx bxs-user-circle'></i> Meu Perfil
+            </a>
+            
+            <a href="/logout" class="action-link logout-link">
+                <i class='bx bx-log-out'></i> Sair
+            </a>
+            
+            <button id="theme-toggle" class="theme-toggle-button" title="Alternar Modo Escuro/Claro">
+                </button>
+        </div>
+    </div>
+
+    <div class="feed-container">
+        <% if (denuncias.length > 0) { %>
+            <% denuncias.forEach(function(denuncia) { %>
+                <div class="denuncia-card">
+                    <h2>
+                        <%= denuncia.titulo %>
+                        <% if (denuncia.status === 'RESOLVIDA') { %>
+                            <span class="status-badge RESOLVIDA">RESOLVIDA</span>
+                        <% } %>
+                    </h2>
+                    
+                    <% 
+                        const arquivos = denuncia.nome_arquivo ? denuncia.nome_arquivo.split(';') : [];
+                    %>
+                    
+                    <% if (arquivos.length > 0) { %>
+                        <div class="denuncia-media">
+                            <% arquivos.forEach(fileName => { 
+                                const extension = fileName.split('.').pop().toLowerCase();
+                                const isVideo = ['mp4', 'mov', 'webm', 'avi'].includes(extension);
+                                const mediaUrl = `/uploads/${fileName}`; 
+                            %>
+                                <div class="media-thumbnail-wrapper" onclick="openLightbox('<%= mediaUrl %>', '<%= isVideo ? 'video' : 'image' %>')">
+                                    <% if (isVideo) { %>
+                                        <video src="<%= mediaUrl %>" title="<%= fileName %>"></video>
+                                    <% } else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) { %>
+                                        <img src="<%= mediaUrl %>" alt="Imagem da Denúncia">
+                                    <% } %>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } %>
+
+                    <p><strong>Descrição:</strong> <%= denuncia.descricao %></p>
+                    
+                    <div class="denuncia-info">
+                        <p><strong><span style="color: var(--primary-color);">Localização:</span></strong> <%= denuncia.localizacao %></p>
+                        <p><strong><span style="color: var(--primary-color);">Enviado por:</span></strong> <%= denuncia.nome_exibicao || 'Anônimo' %></p>
+                        <p><strong><span style="color: var(--primary-color);">Data:</span></strong> <%= new Date(denuncia.data_envio).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></p>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="no-denuncias" style="text-align: center; padding: 40px; color: var(--light-text);">
+                <i class='bx bx-news' style="font-size: 4em; margin-bottom: 15px; opacity: 0.5;"></i>
+                <p>Nenhuma denúncia aprovada no momento. Seja o primeiro a fazer uma!</p>
+            </div>
+        <% } %>
+    </div>
+
+    <a href="/denuncia" class="btn-nova-denuncia-float">
+        <i class='bx bxs-megaphone'></i> Fazer Nova Denúncia
+    </a>
+    
+    <div id="lightboxModal" onclick="closeLightbox()">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <div id="lightboxContent" onclick="event.stopPropagation()"></div>
+    </div>
+
+    <script>
+        /* Controle do Lightbox */
+        const lightboxModal = document.getElementById('lightboxModal');
+        const lightboxContent = document.getElementById('lightboxContent');
+        
+        function openLightbox(src, type) {
+            if(event) event.stopPropagation(); 
+            lightboxContent.innerHTML = ''; 
+            
+            if (type === 'image') {
+                lightboxContent.innerHTML = `<img src="${src}" alt="Mídia da Denúncia">`;
+            } else if (type === 'video') {
+                lightboxContent.innerHTML = `<video controls autoplay src="${src}" style="max-width: 100%; max-height: 90vh;"></video>`;
+            }
+            
+            lightboxModal.classList.add('visible');
+            lightboxModal.style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            const video = lightboxContent.querySelector('video');
+            if (video) video.pause();
+            lightboxModal.classList.remove('visible');
+            lightboxModal.style.display = 'none';
+        }
+        
+        window.openLightbox = openLightbox;
+        window.closeLightbox = closeLightbox;
+
+        /* Gerenciamento de Tema */
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const darkModeClass = 'dark-theme';
+        const iconMoon = 'bxs-moon';
+        const iconSun = 'bxs-sun';
+
+        function applyTheme(isDark) {
+            if (isDark) {
+                body.classList.add(darkModeClass);
+                themeToggle.innerHTML = `<i class='bx ${iconSun}'></i>`;
+            } else {
+                body.classList.remove(darkModeClass);
+                themeToggle.innerHTML = `<i class='bx ${iconMoon}'></i>`;
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            applyTheme(true);
+        } else {
+            applyTheme(false); 
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.classList.contains(darkModeClass);
+            if (isDark) {
+                applyTheme(false);
+                localStorage.setItem('theme', 'light');
+            } else {
+                applyTheme(true);
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && lightboxModal.classList.contains('visible')) {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>

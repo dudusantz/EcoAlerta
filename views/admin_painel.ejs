@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Moderação | EcoAlerta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* Variáveis de Cores e Tema */
+        :root {
+            --primary-color: #1C563F; 
+            --secondary-color: #76C25A; 
+            --bg-color: #E2E3E5; 
+            --card-bg: #ffffff; 
+            --text-color: #333; 
+            --dark-color: #333; 
+            --pending-color: #ff9800;
+            --denuncia-text: #444;
+            --link-color: #007bff;
+            --logout-bg: #d32f2f;
+            --resolved-color: #28a745;
+        }
+
+        body.dark-theme {
+            --primary-color: #76C25A; 
+            --secondary-color: #1C563F; 
+            --bg-color: #121212; 
+            --card-bg: #1f1f1f;
+            --text-color: #E0E0E0; 
+            --dark-color: #E0E0E0; 
+            --pending-color: #ffb74d;
+            --denuncia-text: #B0B0B0;
+            --link-color: #71b9ff;
+            --logout-bg: #d32f2f;
+            --resolved-color: #4CAF50;
+        }
+
+        /* Estilos Globais */
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-color); 
+            padding: 20px;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .admin-container { max-width: 1200px; margin: 0 auto; }
+        
+        /* Cabeçalho e Ações */
+        h1 { 
+            color: var(--primary-color); 
+            border-bottom: 2px solid var(--primary-color); 
+            padding-bottom: 10px; 
+            margin-bottom: 30px;
+            text-align: center; 
+        }
+
+        .header-admin { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px;
+            padding-top: 20px; 
+        }
+        .header-actions-group { 
+            display: flex;
+            align-items: center; 
+            gap: 25px; 
+        }
+        .user-info-box { 
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        /* Listagem de Denúncias */
+        .denuncia-list { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .denuncia-card { background: var(--card-bg); padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid; position: relative; color: var(--denuncia-text); }
+        .denuncia-card h3 { color: var(--text-color); }
+        
+        /* Indicadores de Status */
+        .denuncia-card.APROVADA { border-left-color: var(--secondary-color); }
+        .denuncia-card.REJEITADA { border-left-color: #f44336; }
+        .denuncia-card.PENDENTE { border-left-color: var(--pending-color); }
+        .denuncia-card.RESOLVIDA { border-left-color: var(--resolved-color); }
+
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; color: white; font-weight: 600; font-size: 0.8em; margin-bottom: 10px; }
+        .status-badge.PENDENTE { background-color: var(--pending-color); }
+        .status-badge.APROVADA { background-color: var(--secondary-color); }
+        .status-badge.REJEITADA { background-color: #f44336; }
+        .status-badge.RESOLVIDA { background-color: var(--resolved-color); }
+
+        /* Botões de Ação */
+        .btn-action { padding: 8px 15px; border: none; border-radius: 4px; color: white; font-weight: 600; cursor: pointer; margin-right: 10px; transition: background-color 0.3s; }
+        .btn-aprovar { background-color: var(--secondary-color); }
+        .btn-aprovar:hover { background-color: #63a948; }
+        .btn-rejeitar { background-color: var(--logout-bg); }
+        .btn-rejeitar:hover { background-color: #b71c1c; }
+        .btn-resolvida { background-color: var(--resolved-color); }
+        .btn-resolvida:hover { background-color: #218838; }
+
+        .denuncia-details { margin-top: 10px; }
+        .denuncia-details a { color: var(--link-color); text-decoration: none; }
+        
+        .logout-link { color: var(--logout-bg); text-decoration: none; font-weight: 600; }
+        .btn-voltar-feed { background-color: var(--secondary-color); color: var(--dark-color); padding: 10px 18px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: background-color 0.3s, color 0.3s; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .btn-voltar-feed:hover { background-color: var(--primary-color); color: white; }
+
+        .theme-toggle-button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.5em;
+            cursor: pointer;
+            margin-left: 10px;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+        .theme-toggle-button:hover { color: var(--secondary-color); }
+
+        /* Modal de Rejeição */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        .modal.is-visible { display: flex; }
+        .modal-content { background-color: var(--card-bg); padding: 30px; border-radius: 8px; width: 90%; max-width: 500px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; text-align: left; }
+        .close-btn { color: #aaa; position: absolute; top: 10px; right: 15px; font-size: 30px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover { color: var(--text-color); cursor: pointer; }
+        .modal-content h2 { color: var(--logout-bg); margin-top: 0; margin-bottom: 15px; text-align: center; }
+        .modal-content p { color: var(--denuncia-text); font-weight: 500; margin-bottom: 20px; text-align: center; }
+        .modal-content textarea { color: var(--text-color); background-color: var(--bg-color); width: calc(100% - 2px); min-height: 120px; margin-top: 5px; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; resize: vertical; font-family: 'Poppins', sans-serif; font-size: 15px; }
+        .modal-content #rejectionError { color: var(--logout-bg); font-weight: 500; text-align: left; margin-top: 10px; }
+        .modal-content button.btn-rejeitar { margin-top: 20px; width: 100%; padding: 12px; font-size: 1em; border-radius: 6px; }
+        
+        .feedback { font-weight: 600; margin-top: 10px; }
+        .feedback.error { color: var(--logout-bg); }
+        .feedback.success { color: var(--secondary-color); }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="header-admin">
+            <h1>Painel de Moderação de Denúncias</h1>
+            
+            <div class="header-actions-group">
+                <div class="user-info-box">
+                    <p style="margin: 0; font-weight: 600;">Administrador (<%= usuarioNome %>)</p>
+                    <a href="/logout" class="logout-link">Sair</a>
+                </div>
+
+                <a href="/feed" class="btn-voltar-feed">
+                    <i class='bx bx-arrow-back' style="margin-right: 5px;"></i> Voltar ao Feed
+                </a>
+                
+                <button id="theme-toggle" class="theme-toggle-button" title="Alternar Modo Escuro/Claro"></button>
+            </div>
+        </div>
+        
+        <div class="denuncia-list">
+            <% if (denuncias.length === 0) { %>
+                <p>Nenhuma denúncia no sistema.</p>
+            <% } else { %>
+                <% denuncias.forEach(denuncia => { %>
+                    <div class="denuncia-card <%= denuncia.status %>" id="denuncia-<%= denuncia.id %>">
+                        <span class="status-badge <%= denuncia.status %>"><%= denuncia.status %></span>
+                        <h3><%= denuncia.titulo %> (ID: <%= denuncia.id %>)</h3>
+                        <p>Enviado por: <strong><%= denuncia.nome_exibicao %></strong> | <%= new Date(denuncia.data_envio).toLocaleDateString('pt-BR') %></p>
+                        <div class="denuncia-details">
+                            <p>Localização: <%= denuncia.localizacao %></p>
+                            <p>Descrição: <%= denuncia.descricao.substring(0, 80) %>...</p>
+                            <a href="/denuncia/detalhes/<%= denuncia.id %>" style="color: var(--link-color); font-weight: 500;">Ver Detalhes e Arquivos</a>
+                            
+                            <% if (denuncia.status === 'PENDENTE') { %>
+                                <div style="margin-top: 15px;" id="actions-<%= denuncia.id %>">
+                                    <button type="button" onclick="updateStatus('<%= denuncia.id %>', 'APROVADA', '')" class="btn-action btn-aprovar">Aprovar</button>
+                                    <button type="button" onclick="openRejectionModal('<%= denuncia.id %>')" class="btn-action btn-rejeitar">Rejeitar</button>
+                                </div>
+                                <p class="feedback" id="feedback-<%= denuncia.id %>"></p>
+                            <% } else if (denuncia.status === 'APROVADA') { %>
+                                <div style="margin-top: 15px;" id="actions-<%= denuncia.id %>">
+                                    <button type="button" onclick="resolveStatus('<%= denuncia.id %>')" class="btn-action btn-resolvida">Marcar como Resolvida</button>
+                                </div>
+                                <p class="feedback" id="feedback-<%= denuncia.id %>"></p>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+    </div>
+
+    <div id="rejectionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeRejectionModal()">&times;</span>
+            <h2 style="color: var(--logout-bg);">Rejeitar Denúncia</h2>
+            <p>Por favor, especifique o motivo da rejeição para notificar o usuário.</p>
+            <form id="rejectionForm">
+                <textarea id="rejectionReasonInput" placeholder="Motivo da rejeição" required></textarea>
+                <p id="rejectionError" style="text-align: left; margin-top: 5px;"></p>
+                <button type="submit" class="btn-action btn-rejeitar" style="width: 100%;">Confirmar Rejeição</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        let currentDenunciaId = null;
+
+        /* Gerenciamento de Tema (Dark/Light Mode) */
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const darkModeClass = 'dark-theme';
+        const iconMoon = 'bxs-moon';
+        const iconSun = 'bxs-sun';
+
+        function applyTheme(isDark) {
+            if (isDark) {
+                body.classList.add(darkModeClass);
+                themeToggle.innerHTML = `<i class='bx ${iconSun}'></i>`;
+            } else {
+                body.classList.remove(darkModeClass);
+                themeToggle.innerHTML = `<i class='bx ${iconMoon}'></i>`;
+            }
+        }
+
+        // Inicialização do tema salvo
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') { applyTheme(true); } else { applyTheme(false); }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.classList.contains(darkModeClass);
+            if (isDark) {
+                applyTheme(false);
+                localStorage.setItem('theme', 'light');
+            } else {
+                applyTheme(true);
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        /* Controle do Modal */
+        function closeRejectionModal() {
+            document.getElementById('rejectionModal').classList.remove('is-visible');
+        }
+
+        function openRejectionModal(denunciaId) {
+            currentDenunciaId = denunciaId;
+            document.getElementById('rejectionModal').classList.add('is-visible');
+            document.getElementById('rejectionReasonInput').value = '';
+            document.getElementById('rejectionError').textContent = '';
+        }
+
+        /* Funções de Atualização de Status (API) */
+        async function updateStatus(denunciaId, newStatus, rejectionReason = '') {
+            const feedbackElement = document.getElementById(`feedback-${denunciaId}`);
+            
+            if (newStatus === 'REJEITADA' && !rejectionReason.trim()) {
+                document.getElementById('rejectionError').textContent = 'O motivo da rejeição é obrigatório.';
+                return;
+            }
+
+            if (feedbackElement) {
+                feedbackElement.textContent = 'Processando...';
+                feedbackElement.className = 'feedback';
+            }
+            
+            closeRejectionModal();
+
+            try {
+                const response = await fetch('/admin/update-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: denunciaId, newStatus: newStatus, rejectionReason: rejectionReason })
+                });
+
+                if (response.ok) { 
+                    window.location.reload(); 
+                } else {
+                    const errorText = await response.text();
+                    alert(`Falha na Moderação: ${errorText}`);
+                }
+            } catch (error) { 
+                alert('Erro de conexão.'); 
+            }
+        }
+
+        async function resolveStatus(denunciaId) {
+            try {
+                const response = await fetch('/admin/resolve-denuncia', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: denunciaId })
+                });
+                
+                if (response.ok) { 
+                    window.location.reload(); 
+                } else {
+                    const errorText = await response.text();
+                    alert(`Falha na Resolução: ${errorText}`);
+                }
+            } catch (error) { 
+                alert('Erro de conexão.'); 
+            }
+        }
+
+        /* Event Listeners */
+        document.getElementById('rejectionForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const reason = document.getElementById('rejectionReasonInput').value;
+            updateStatus(currentDenunciaId, 'REJEITADA', reason);
+        });
+
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('rejectionModal')) {
+                closeRejectionModal();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil | EcoAlerta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+    
+    <style>
+        /* Variáveis de Tema */
+        :root {
+            --primary-color: #1C563F; 
+            --secondary-color: #76C25A; 
+            --background-color: #E2E3E5; 
+            --dark-color: #333; 
+            --card-bg: #ffffff; 
+            --border-color: #e0e0e0;
+            --logout-bg: #d32f2f;
+            --input-bg: #f5f5f5;
+            --text-color: #333; 
+            --light-text: #777;
+            --resolved-color: #28a745;
+        }
+
+        /* Tema Escuro */
+        body.dark-theme {
+            --primary-color: #76C25A; 
+            --secondary-color: #1C563F;
+            --background-color: #121212; 
+            --dark-color: #E0E0E0; 
+            --card-bg: #1f1f1f;
+            --border-color: #333333;
+            --logout-bg: #d32f2f;
+            --input-bg: #2a2a2a;
+            --text-color: #E0E0E0; 
+            --light-text: #B0B0B0;
+            --resolved-color: #4CAF50;
+        }
+
+        /* Estilos Globais */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            padding: 20px;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        /* Seção de Informações do Usuário */
+        .user-info {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        .user-info h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .action-buttons-topo {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Formulários */
+        .form-group-perfil {
+            margin-bottom: 15px;
+        }
+        .form-group-perfil label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        .form-group-perfil input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+        input:disabled {
+            background-color: var(--input-bg) !important;
+            color: var(--light-text);
+        }
+        
+        /* Botões de Ação */
+        .btn-sm-action {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        #btn-mudar-senha {
+            background-color: var(--logout-bg); 
+            color: white;a
+            margin-right: 10px;
+        }
+        #btn-mudar-senha:hover { 
+            background-color: #b71c1c; 
+        }
+        
+        #btn-toggle-edit {
+            background-color: var(--secondary-color); 
+            color: var(--dark-color);
+        }
+        #btn-toggle-edit:hover { 
+            background-color: var(--primary-color); 
+            color: white; 
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .btn-update-perfil {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        .btn-update-perfil:hover { background-color: #12402e; }
+
+        /* Botão de Tema */
+        .theme-toggle-button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.5em;
+            cursor: pointer;
+            margin-left: 10px;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+        .theme-toggle-button:hover { color: var(--secondary-color); }
+
+        /* Estilos dos Modais */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 1001; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.8); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .modal-content { 
+            background-color: var(--card-bg); 
+            margin: 0; 
+            padding: 30px; 
+            border: 1px solid var(--border-color); 
+            width: 80%; 
+            max-width: 450px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3); 
+            text-align: center; 
+            color: var(--text-color);
+            position: relative;
+            z-index: 1002;
+        }
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover, .close-btn:focus { color: var(--text-color); text-decoration: none; cursor: pointer; }
+        
+        .message-success { color: var(--primary-color) !important; font-weight: 600 !important; }
+        .message-error { color: #d32f2f !important; }
+
+        .confirm-actions {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .confirm-actions button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex-grow: 1;
+        }
+        
+        #confirm-ok-btn {
+            background-color: var(--logout-bg); 
+            color: white;
+        }
+        #confirm-ok-btn:hover { background-color: #b71c1c; }
+
+        #confirm-cancel-btn {
+            background-color: var(--input-bg); 
+            color: var(--text-color);
+        }
+        #confirm-cancel-btn:hover { background-color: var(--border-color); }
+
+        /* Lista de Denúncias */
+        .denuncia-item {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            background-color: var(--card-bg);
+        }
+        .denuncia-details { width: 70%; }
+        .denuncia-actions { width: 25%; text-align: right; }
+        
+        .status-badge { display: inline-block; padding: 5px 10px; border-radius: 5px; color: white; font-weight: 600; font-size: 0.9em; margin-right: 10px; }
+        .status-badge.PENDENTE { background-color: #ff9800; }
+        .status-badge.APROVADA { background-color: var(--secondary-color); }
+        .status-badge.REJEITADA { background-color: #f44336; }
+        .status-badge.RESOLVIDA { background-color: var(--resolved-color); }
+
+        .btn-cancelar-denuncia { background-color: var(--logout-bg); color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; text-decoration: none; font-size: 0.9em; }
+        .btn-cancelar-denuncia:hover { background-color: #b71c1c; }
+        
+        /* Navegação Inferior */
+        .action-buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+        .action-buttons a { padding: 10px 20px; border-radius: 20px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: flex; align-items: center; }
+        
+        .btn-back { background-color: var(--secondary-color); color: var(--dark-color); }
+        .btn-back:hover { background-color: var(--primary-color); color: white; }
+        
+        .btn-logout { background-color: var(--logout-bg); color: white; padding: 10px 25px; }
+        .btn-logout:hover { background-color: #d32f2f; }
+    </style>
+</head>
+<body id="profile-body">
+
+    <div class="container">
+        <h1><i class='bx bxs-user-circle' style="font-size: 1.2em; vertical-align: middle;"></i> Meu Perfil</h1>
+
+        <div class="user-info">
+            <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Editar Dados Pessoais</h2>
+                <div class="action-buttons-topo">
+                    <button type="button" id="btn-mudar-senha" onclick="openChangePasswordModal()" class="btn-sm-action">
+                        Mudar Senha
+                    </button>
+                    <button type="button" id="btn-toggle-edit" onclick="toggleEditMode()" class="btn-sm-action">
+                        Editar Perfil
+                    </button>
+                    <button id="theme-toggle" class="theme-toggle-button" title="Alternar Modo Escuro/Claro"></button>
+                </div>
+            </div>
+
+            <form id="editForm" method="POST" action="/perfil">
+                <% 
+                    const dataNascObj = new Date(usuario.dataNascimento);
+                    const yyyy = dataNascObj.getFullYear();
+                    const mm = String(dataNascObj.getMonth() + 1).padStart(2, '0');
+                    const dd = String(dataNascObj.getDate()).padStart(2, '0');
+                    const dataInputFormat = `${yyyy}-${mm}-${dd}`; 
+                %>
+                <div class="form-group-perfil">
+                    <label for="nomeCompleto">Nome Completo:</label>
+                    <input type="text" id="nomeCompleto" name="nomeCompleto" value="<%= usuario.nomeCompleto %>" disabled required>
+                </div>
+                <div class="form-group-perfil">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" value="<%= usuario.email %>" disabled required> 
+                </div>
+                <div class="form-group-perfil">
+                    <label>CPF:</label>
+                    <input type="text" value="<%= usuario.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') %>" disabled>
+                </div>
+                <div class="form-group-perfil">
+                    <label for="dataNascimento">Data de Nascimento:</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento" value="<%= dataInputFormat %>" disabled required>
+                </div>
+                <p id="message" style="color:red; margin-top: 10px;"></p>
+                <button type="submit" id="submitButton" class="btn-update-perfil" disabled>Salvar Alterações</button>
+            </form>
+        </div>
+        
+        <h2 class="section-title">Minhas Denúncias Enviadas</h2>
+        <% if (denuncias.length === 0) { %>
+            <p>Você ainda não enviou nenhuma denúncia.</p>
+        <% } else { %>
+            <% denuncias.forEach(denuncia => { %>
+                <div class="denuncia-item">
+                    <div class="denuncia-details">
+                        <h3><a href="/denuncia/detalhes/<%= denuncia.id %>" style="color: var(--text-color); text-decoration: none; font-weight: 600;"><%= denuncia.titulo %></a></h3>
+                        <p><span class="status-badge <%= denuncia.status %>"><%= denuncia.status %></span> Enviada em: <%= new Date(denuncia.data_envio).toLocaleDateString('pt-BR') %></p>
+                        <p style="font-size: 0.9em; margin-top: 5px;"><%= denuncia.descricao.substring(0, 80) %>...</p>
+                    </div>
+                    <div class="denuncia-actions">
+                        <form method="POST" action="/denuncia/cancelar/<%= denuncia.id %>">
+                            <button type="button" class="btn-cancelar-denuncia" onclick="openConfirmModal('<%= denuncia.id %>')"><i class='bx bx-x'></i> Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            <% }); %>
+        <% } %>
+
+        <div class="action-buttons">
+            <a href="/feed" class="btn-back"><i class='bx bx-arrow-back'></i> Voltar ao Feed</a>
+            <a href="/logout" class="btn-logout"><i class='bx bx-log-out'></i> Sair</a>
+        </div>
+    </div>
+    
+    <div id="changePasswordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('changePasswordModal')">&times;</span>
+            <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 20px;">Mudar Senha</h2>
+            <form id="changePasswordForm" method="POST" action="/perfil/senha">
+                <div class="form-group-perfil"><label for="modalCurrentPassword">Senha Atual:</label><input type="password" id="modalCurrentPassword" name="currentPassword" required></div>
+                <div class="form-group-perfil"><label for="modalNewPassword">Nova Senha:</label><input type="password" id="modalNewPassword" name="newPassword" placeholder="Mínimo 6 caracteres" required></div>
+                <button type="submit" class="btn-update-perfil" style="width: 100%;">Confirmar Mudança</button>
+                <p id="passwordMessage" style="text-align: center; margin-top: 10px;"></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="confirmCancelModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 style="color: #d32f2f; margin-bottom: 20px;">Confirmação Necessária</h2>
+            <p style="font-size: 1.1em; margin-bottom: 30px;">Tem certeza que deseja cancelar esta denúncia?</p>
+            <div class="confirm-actions">
+                <button type="button" id="confirm-ok-btn">Sim, Cancelar</button>
+                <button type="button" id="confirm-cancel-btn" onclick="closeModal('confirmCancelModal')">Não, Manter</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/perfil.js"></script>
+    <script>
+        /* Gerenciamento de Tema */
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const darkModeClass = 'dark-theme';
+        const iconMoon = 'bxs-moon';
+        const iconSun = 'bxs-sun';
+
+        function applyTheme(isDark) {
+            if (isDark) {
+                body.classList.add(darkModeClass);
+                themeToggle.innerHTML = `<i class='bx ${iconSun}'></i>`;
+            } else {
+                body.classList.remove(darkModeClass);
+                themeToggle.innerHTML = `<i class='bx ${iconMoon}'></i>`;
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') { applyTheme(true); } else { applyTheme(false); }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.classList.contains(darkModeClass);
+            if (isDark) {
+                applyTheme(false);
+                localStorage.setItem('theme', 'light');
+            } else {
+                applyTheme(true);
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>

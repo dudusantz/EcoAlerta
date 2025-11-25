@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>EcoAlerta - Cadastro</title>
+</head>
+<body>
+
+    <main class="container">
+        <form id="registerForm"> 
+            <div class="logo-container glass-logo-box">
+                <img src="/img/EcoAlerta.png" alt="Logo EcoAlerta" class="login-logo">
+            </div>
+            <h1>Cadastre-se</h1>
+            
+            <div class="input-box" id="nomeBox">
+                <input placeholder="Nome Completo" type="text" name="nomeCompleto" id="nomeCompletoInput" required>
+                <i class="bx bxs-user"></i>
+            </div>
+            
+            <div class="input-box" id="cpfBox">
+                <input 
+                    placeholder="CPF (apenas números)" type="text" name="cpf" id="cpfInput"
+                    required maxlength="14" title="O CPF deve conter 11 dígitos numéricos."
+                >
+                <i class="bx bxs-id-card"></i> 
+                <small class="error-text" id="cpfError"></small>
+            </div>
+            
+            <div class="input-box" id="dataBox">
+                <input placeholder="DD/MM/AAAA" type="text" name="dataNascimento" id="dataNascimentoInput" required>
+                <i class="bx bxs-calendar"></i> 
+                </div>
+
+            <div class="input-box" id="emailBox">
+                <input placeholder="Email" type="email" name="email" id="emailInput" required>
+                <i class="bx bxs-envelope"></i>
+                <small class="error-text" id="emailError"></small>
+            </div>
+            
+            <div class="input-box" id="senhaBox">
+                <input placeholder="Senha" type="password" name="password" id="senhaInput" required>
+                <i class="bx bxs-lock-alt"></i>
+            </div>
+            
+            <div class="checkbox-group" style="margin-top: -10px; margin-bottom: 25px; display: flex; align-items: center;">
+                <label style="color: #fff; font-size: 15px;">
+                    <input type="checkbox" name="aceiteTermos" required style="accent-color: #76C25A; margin-right: 5px;">
+                    Eu li e aceito os <a href="javascript:void(0);" onclick="openTermsModal()" style="color: #fff; text-decoration: underline; font-weight: 500;">Termos de Uso</a>.
+                </label>
+            </div>
+            <p id="generalMessage" style="color:red; text-align: center; font-weight: 600; margin-bottom: 10px;"></p>
+
+            <button type="submit" class="login">Criar Conta</button>
+
+            <div class="register-link">
+                <p>Já tem uma conta? <a href="login.html">Faça Login</a></p> 
+            </div>
+        </form>
+    </main>
+
+    <div id="termsModal" class="modal-overlay">
+        <div class="modal-content-terms">
+            <span class="close-modal" onclick="closeTermsModal()">&times;</span>
+            <div id="termsContentPlaceholder">Carregando termos...</div>
+            <button class="btn-close-terms" onclick="closeTermsModal()">Fechar</button> 
+        </div>
+    </div>
+
+    <style>
+        .error-text { color: #ff0000; font-size: 14px; margin-top: -20px; display: block; padding-left: 20px; }
+        .input-box.error input { border-color: #ff0000 !important; }
+        .message-success { color: #76C25A !important; }
+        .message-error-general { color: #ff0000 !important; }
+        
+        .input-box#dataBox .bx.bxs-calendar { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #c7c7c7; pointer-events: none; }
+        
+        /* Modal Style (Glassmorphism) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); }
+        .modal-content-terms { background: rgba(90, 119, 47, 0.9); backdrop-filter: blur(8px); border: 2px solid rgba(255, 255, 255, .2); padding: 30px; border-radius: 12px; width: 90%; max-width: 650px; max-height: 85%; overflow-y: auto; color: #fff; }
+        .close-modal { position: absolute; top: 15px; right: 25px; font-size: 36px; cursor: pointer; color: #fff; }
+        .btn-close-terms { background: #fff; color: #333; padding: 12px 20px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; margin-top: 25px; width: 100%; }
+    </style>
+
+    <script>
+        const form = document.getElementById('registerForm');
+        const cpfInput = document.getElementById('cpfInput');
+        const dataInput = document.getElementById('dataNascimentoInput');
+        const generalMessage = document.getElementById('generalMessage');
+
+        // --- Lógica do Modal de Termos ---
+        function openTermsModal() {
+            const modal = document.getElementById('termsModal');
+            const placeholder = document.getElementById('termsContentPlaceholder');
+            
+            // Busca o HTML dos termos via rota do backend para manter consistência
+            fetch('/view-terms')
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const content = doc.querySelector('.terms-content-scroll'); 
+                    
+                    if (content) {
+                        placeholder.innerHTML = content.innerHTML;
+                        // Ajuste visual para garantir leitura no fundo escuro
+                        placeholder.querySelectorAll('*').forEach(el => el.style.color = el.tagName.match(/^H[1-6]$/) ? '#fff' : '#ccc');
+                    } else {
+                        placeholder.innerHTML = "Não foi possível carregar os termos.";
+                    }
+                    modal.style.display = 'flex';
+                })
+                .catch(() => modal.style.display = 'flex');
+        }
+
+        function closeTermsModal() { document.getElementById('termsModal').style.display = 'none'; }
+        window.openTermsModal = openTermsModal;
+
+        // --- Validação de Regras de Negócio (Frontend) ---
+        function validateAge(dateString) {
+            const parts = dateString.split('/');
+            const day = parseInt(parts[0]), month = parseInt(parts[1]), year = parseInt(parts[2]);
+
+            if (isNaN(day) || isNaN(month) || isNaN(year)) return "Data inválida.";
+            
+            const birthDate = new Date(year, month - 1, day);
+            const today = new Date();
+            const ageThreshold = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+            if (birthDate.getFullYear() !== year || birthDate.getMonth() !== month - 1) return "Data inexistente.";
+            if (birthDate >= ageThreshold) return "Você deve ter pelo menos 18 anos.";
+            if (year < 1900) return "Ano inválido.";
+
+            return true;
+        }
+
+        // Máscaras de Input
+        cpfInput.addEventListener('input', e => {
+            e.target.value = e.target.value.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4").substring(0, 14);
+        });
+        
+        dataInput.addEventListener('input', e => {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 2) v = v.replace(/^(\d{2})(\d)/, '$1/$2');
+            if (v.length > 5) v = v.replace(/^(\d{2})\/(\d{2})(\d)/, '$1/$2/$3');
+            e.target.value = v.substring(0, 10);
+        });
+        
+        // --- Submissão ---
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); 
+            
+            // Limpa erros visuais
+            generalMessage.textContent = '';
+            document.querySelectorAll('.error-text').forEach(el => el.textContent = '');
+            document.querySelectorAll('.input-box').forEach(el => el.classList.remove('error'));
+
+            // Validação local antes de enviar
+            if (dataInput.value.length !== 10) return showGeneralError('Data incompleta.');
+            
+            const ageCheck = validateAge(dataInput.value);
+            if (ageCheck !== true) return showGeneralError(ageCheck);
+            
+            const formData = {
+                nomeCompleto: document.getElementById('nomeCompletoInput').value,
+                cpf: cpfInput.value.replace(/\D/g, ''),
+                dataNascimento: dataInput.value,
+                email: document.getElementById('emailInput').value,
+                password: document.getElementById('senhaInput').value,
+            };
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const responseText = await response.text();
+            
+            if (response.ok) {
+                generalMessage.textContent = 'Cadastro realizado! Redirecionando...';
+                generalMessage.className = 'message-success';
+                setTimeout(() => window.location.href = '/login.html', 2000);
+
+            } else if (response.status === 409 || response.status === 400) {
+                // Tratamento de conflito (Duplicidade)
+                generalMessage.textContent = 'Erro: CPF ou Email já cadastrados.';
+                generalMessage.className = 'message-error-general';
+                
+                if (responseText.includes('CPF')) setError('cpfBox', 'cpfError', 'CPF duplicado.');
+                if (responseText.includes('Email')) setError('emailBox', 'emailError', 'Email duplicado.');
+            } else {
+                showGeneralError('Erro interno no servidor.');
+            }
+        });
+
+        function showGeneralError(msg) {
+            generalMessage.textContent = msg;
+            generalMessage.className = 'message-error-general';
+        }
+
+        function setError(boxId, textId, msg) {
+            document.getElementById(boxId).classList.add('error');
+            document.getElementById(textId).textContent = msg;
+        }
+    </script>
+</body>
+</html>

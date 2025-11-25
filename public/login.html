@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+    <link rel="stylesheet" href="/css/styles.css"> 
+    <title>EcoAlerta - Login</title>
+</head>
+<body>
+
+    <main class="container">
+        <form id="loginForm"> 
+            <div class="logo-container glass-logo-box">
+                <img src="/img/EcoAlerta.png" alt="Logo EcoAlerta" class="login-logo">
+            </div>
+            <h1>Login EcoAlerta</h1>
+            
+            <div class="input-box" id="cpfBox">
+                <input 
+                    placeholder="CPF" type="text" name="cpf" id="cpfInput" 
+                    required maxlength="14" title="O CPF deve conter 11 dígitos numéricos."
+                >
+                <i class="bx bxs-user"></i>
+                <small class="error-text" id="cpfError"></small>
+            </div>
+
+            <div class="input-box" id="senhaBox">
+                <input placeholder="Senha" type="password" name="password" id="senhaInput" required>
+                <i class="bx bxs-lock-alt"></i>
+                <small class="error-text" id="senhaError"></small>
+            </div>
+        
+            <div class="remember-forgot">
+                <label><input type="checkbox"> Lembrar senha</label>
+                <a href="/esqueci-senha">Esqueci a senha</a>
+            </div>
+
+            <button type="submit" class="login">Login</button>
+
+            <div class="register-link">
+                <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+            </div>
+        </form>
+    </main>
+    
+    <script>
+        const form = document.getElementById('loginForm');
+        const cpfInput = document.getElementById('cpfInput');
+        
+        // Máscara dinâmica de CPF (000.000.000-00)
+        cpfInput.addEventListener('input', function(e) {
+            let valor = e.target.value.replace(/\D/g, ''); 
+            valor = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+            e.target.value = valor.substring(0, 14); 
+        });
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); 
+
+            // Reseta estados de erro da UI
+            document.querySelectorAll('.error-text').forEach(el => el.textContent = '');
+            document.querySelectorAll('.input-box').forEach(el => el.classList.remove('error'));
+
+            const cpf = cpfInput.value.replace(/\D/g, ''); // Envia apenas números
+            const password = document.getElementById('senhaInput').value;
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cpf, password }) 
+                });
+                
+                const responseText = await response.text();
+                let responseData = {};
+
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch (jsonError) {
+                    console.error("Erro parse JSON:", responseText);
+                    return alert(`Erro interno do servidor.`);
+                }
+
+                if (response.ok) {
+                    window.location.href = '/feed'; 
+                } else if (responseData.campo) {
+                    // Mapeia erro da API para o campo específico na tela
+                    if (responseData.campo === 'cpf') {
+                        document.getElementById('cpfError').textContent = responseData.mensagem;
+                        document.getElementById('cpfBox').classList.add('error');
+                    } else if (responseData.campo === 'password') {
+                        document.getElementById('senhaError').textContent = responseData.mensagem;
+                        document.getElementById('senhaBox').classList.add('error');
+                    } else {
+                        alert(responseData.mensagem);
+                    }
+                } else {
+                    alert(responseData.mensagem || 'Erro desconhecido.');
+                }
+            } catch (error) {
+                console.error("Network Error:", error);
+                alert('Falha na conexão.');
+            }
+        });
+    </script>
+</body>
+</html>

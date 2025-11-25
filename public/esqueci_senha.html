@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Recuperar Senha | EcoAlerta</title>
+    
+    <style>
+        /* Modal de Sucesso Customizado */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
+        .modal-content { background: rgba(90, 119, 47, 0.95); border: 2px solid rgba(255, 255, 255, 0.2); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; color: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.3s ease-out; }
+        .modal-icon { font-size: 50px; color: #fff; margin-bottom: 15px; }
+        .modal-title { font-size: 1.5em; font-weight: 700; margin-bottom: 10px; }
+        .btn-modal { background: #fff; color: #1C563F; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.3s; }
+        .btn-modal:hover { background: #f0f0f0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <div class="logo-container glass-logo-box">
+            <img src="/img/EcoAlerta.png" alt="Logo EcoAlerta" class="login-logo">
+        </div>
+
+        <form id="forgotForm"> 
+            <h1>Recuperar Senha</h1>
+            <p style="text-align: center; margin-bottom: 25px; font-size: 0.9em; color: #ddd;">
+                Digite seu e-mail abaixo. Se a conta existir, enviaremos um link para você redefinir sua senha.
+            </p>
+            
+            <div class="input-box">
+                <input type="email" id="emailInput" required placeholder="Seu E-mail Cadastrado">
+                <i class="bx bxs-envelope"></i>
+            </div>
+
+            <button type="submit" class="login">Enviar Link</button>
+            
+            <div class="register-link">
+                <a href="login.html">Voltar para o Login</a>
+            </div>
+        </form>
+    </main>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content">
+            <i class='bx bxs-check-circle modal-icon'></i>
+            <div class="modal-title">Verifique seu E-mail</div>
+            <div class="modal-text" id="modalMessage">
+                Se o e-mail estiver cadastrado, você receberá um link com instruções em instantes.
+            </div>
+            <button class="btn-modal" onclick="window.location.href = 'login.html'">Entendido</button>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('successModal');
+        const form = document.getElementById('forgotForm');
+        const btnSubmit = form.querySelector('button');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            const originalText = btnSubmit.innerText;
+
+            // Feedback Visual: Bloqueia botão durante requisição
+            btnSubmit.innerText = "Enviando...";
+            btnSubmit.disabled = true;
+            btnSubmit.style.opacity = "0.7";
+
+            try {
+                const response = await fetch('/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                
+                const data = await response.json();
+                
+                // Exibe Modal de Sucesso independente se o email existe (Segurança)
+                modal.style.display = 'flex';
+
+            } catch (error) {
+                alert('Erro de conexão.');
+            } finally {
+                btnSubmit.innerText = originalText;
+                btnSubmit.disabled = false;
+                btnSubmit.style.opacity = "1";
+            }
+        });
+    </script>
+</body>
+</html>

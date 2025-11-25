@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Denúncia | EcoAlerta</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+    
+    <style>
+        /* Variáveis de Tema (Light Mode) */
+        :root {
+            --primary-color: #1C563F;
+            --secondary-color: #76C25A; 
+            --background-color: #E2E3E5; 
+            --dark-color: #333; 
+            --card-bg: #ffffff; 
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --input-bg: #f9f9f9; 
+            --error-color: #d32f2f;
+            --success-color: #28a745;
+        }
+
+        /* Tema Escuro */
+        body.dark-theme {
+            --primary-color: #76C25A;
+            --secondary-color: #1C563F;
+            --background-color: #121212; 
+            --dark-color: #E0E0E0; 
+            --card-bg: #1f1f1f;
+            --text-color: #E0E0E0;
+            --border-color: #333333;
+            --input-bg: #2a2a2a; 
+            --error-color: #ff6b6b;
+        }
+
+        /* Estilos Globais */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            min-height: 100vh;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Container do Formulário */
+        .form-container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        /* Logo e Cabeçalho */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 25px; 
+        }
+        .logo-img {
+            width: 140px;
+            height: auto;
+        }
+
+        .form-container h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 1.8em;
+        }
+
+        /* Inputs e Labels */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .form-group input[type="file"] {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* Grupo de Localização */
+        .location-group {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+        .location-group input[type="text"] {
+            flex-grow: 1;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            padding: 10px;
+            background-color: var(--input-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--secondary-color);
+            cursor: pointer;
+        }
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        /* Botões de Ação */
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit i {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .btn-submit.gps-button {
+            width: auto;
+            padding: 0 20px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+        .btn-submit.gps-button:hover {
+            background-color: var(--primary-color);
+        }
+        
+        /* Navegação */
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 25px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .back-link i { margin-right: 5px;
+        }
+        .back-link:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Lista de Arquivos */
+        #fileListDisplay {
+            margin-top: 10px;
+            border: 1px dashed var(--secondary-color);
+            padding: 15px; 
+            border-radius: 8px;
+            background-color: rgba(118, 194, 90, 0.1); 
+            color: var(--text-color);
+        }
+        #fileListDisplay button {
+            color: var(--error-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        /* Feedback Visual */
+        #submissionFeedback {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+        .feedback-error {
+            background-color: rgba(211, 47, 47, 0.1);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+        .feedback-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        /* Botão de Tema Flutuante */
+        .theme-toggle-float {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        .theme-toggle-float:hover {
+            transform: scale(1.1);
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle" class="theme-toggle-float" title="Alternar Tema"></button>
+
+    <div class="form-container">
+        
+        <div class="logo-container">
+            <img src="/img/EcoAlerta.png" alt="EcoAlerta" class="logo-img">
+        </div>
+
+        <h1>Fazer Nova Denúncia</h1>
+
+        <div id="submissionFeedback"></div>
+
+        <form id="denunciaForm" method="POST" action="/submit-denuncia" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="titulo">Título da Denúncia:</label>
+                <input type="text" id="titulo" name="titulo" required maxlength="100" placeholder="Resumo do problema (ex: Lixo em terreno baldio)"> 
+            </div>
+
+            <div class="form-group">
+                <label for="descricao">Descrição Detalhada:</label>
+                <textarea id="descricao" name="descricao" required placeholder="Descreva o que aconteceu, pontos de referência, etc."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="localizacao">Localização/Endereço:</label>
+                <div class="location-group">
+                    <input 
+                        type="text" 
+                        id="localizacao" 
+                        name="localizacao" 
+                        required
+                        placeholder="Endereço manual ou use o GPS"
+                    >
+                    <button type="button" id="btn-gps" class="btn-submit gps-button">
+                        <i class='bx bx-map-pin'></i> GPS
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="imagem">Fotos ou Vídeos (Mínimo 1):</label>
+                <div style="font-size: 0.85em; color: var(--light-text); margin-bottom: 8px;">
+                    (Limite máximo de 50MB por arquivo)
+                </div>
+                <input type="file" id="imagemInput" name="imagem" accept="image/*,video/*" multiple>
+                
+                <div id="fileListDisplay">
+                    <span style="font-style: italic; opacity: 0.7;">Nenhum arquivo selecionado.</span>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="anonimo" name="anonimo" value="true">
+                <label for="anonimo">Quero fazer esta denúncia de forma <strong>anônima</strong></label>
+            </div>
+
+            <button type="submit" id="btn-enviar" class="btn-submit">
+                <i class='bx bxs-send'></i> Enviar Denúncia
+            </button>
+        </form>
+        
+        <a href="/feed" class="back-link">
+            <i class='bx bx-arrow-back'></i> Voltar para o Feed
+        </a>
+    </div>
+
+    <script>
+        /* Gerenciamento de Tema */
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const darkModeClass = 'dark-theme';
+        const iconMoon = 'bxs-moon';
+        const iconSun = 'bxs-sun';
+
+        function applyTheme(isDark) {
+            if (isDark) {
+                body.classList.add(darkModeClass);
+                themeToggle.innerHTML = `<i class='bx ${iconSun}'></i>`;
+            } else {
+                body.classList.remove(darkModeClass);
+                themeToggle.innerHTML = `<i class='bx ${iconMoon}'></i>`;
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') { applyTheme(true); } else { applyTheme(false); }
+
+        themeToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isDark = body.classList.contains(darkModeClass);
+            if (isDark) {
+                applyTheme(false);
+                localStorage.setItem('theme', 'light');
+            } else {
+                applyTheme(true);
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        /* Inicialização de Elementos */
+        const localizacaoInput = document.getElementById('localizacao');
+        const btnGps = document.getElementById('btn-gps');
+        const imagemInput = document.getElementById('imagemInput');
+        const fileListDisplay = document.getElementById('fileListDisplay');
+        const denunciaForm = document.getElementById('denunciaForm');
+        const feedbackElement = document.getElementById('submissionFeedback');
+        const submitBtn = document.getElementById('btn-enviar');
+        let arquivosAcumulados = []; 
+
+        /* Renderização da lista de arquivos */
+        function renderFileList() {
+            if (arquivosAcumulados.length === 0) {
+                fileListDisplay.innerHTML = '<span style="font-style: italic; opacity: 0.7;">Nenhum arquivo selecionado.</span>';
+                return;
+            }
+            
+            let html = '<p style="font-weight:600; margin-bottom:5px;">Arquivos Prontos:</p><ul style="list-style-type: none; padding-left: 0;">';
+            arquivosAcumulados.forEach((file, index) => {
+                html += `
+                    <li style="font-size: 0.9em; display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border-color);">
+                        <span>${file.name}</span>
+                        <button type="button" onclick="removeFile(${index})">&times;</button>
+                    </li>`;
+            });
+            html += '</ul>';
+            fileListDisplay.innerHTML = html;
+        }
+
+        /* Função para remover arquivo da lista acumulada */
+        window.removeFile = function(index) {
+            arquivosAcumulados.splice(index, 1);
+            updateInputFiles();
+            renderFileList();
+        };
+
+        /* Sincroniza arquivosAcumulados com o input real para envio */
+        function updateInputFiles() {
+            const dataTransfer = new DataTransfer();
+            arquivosAcumulados.forEach(file => dataTransfer.items.add(file));
+            imagemInput.files = dataTransfer.files;
+        }
+
+        /* Listener de Upload */
+        if (imagemInput) {
+            imagemInput.addEventListener('change', (e) => {
+                const newFiles = Array.from(e.target.files);
+                if (newFiles.length > 0) {
+                    arquivosAcumulados = [...arquivosAcumulados, ...newFiles];
+                    updateInputFiles();
+                    renderFileList();
+                }
+            });
+        }
+
+        /* Lógica do GPS */
+        if (btnGps && localizacaoInput) {
+            btnGps.addEventListener('click', () => {
+                if (navigator.geolocation) {
+                    const originalContent = btnGps.innerHTML;
+                    // Mostra carregamento temporário
+                    btnGps.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'; 
+                    btnGps.disabled = true;
+
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const { latitude, longitude } = position.coords;
+                            localizacaoInput.value = `${latitude}, ${longitude}`;
+                            
+                            // Restaura o texto original "GPS" imediatamente após sucesso
+                            btnGps.innerHTML = originalContent;
+                            btnGps.disabled = false;
+                        },
+                        (error) => {
+                            console.error(error);
+                            alert('Erro ao obter localização: ' + error.message);
+                            btnGps.innerHTML = originalContent;
+                            btnGps.disabled = false;
+                        }
+                    );
+                } else {
+                    alert('Geolocalização não é suportada pelo seu navegador.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
