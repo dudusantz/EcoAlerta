@@ -29,30 +29,34 @@ Siga os passos abaixo para rodar o projeto na sua máquina local.
 ### 2. Clonar o Repositório
 Abra o terminal e rode:
 
-bash
+```bash
 git clone [https://github.com/dudusantz/EcoAlerta.git](https://github.com/dudusantz/EcoAlerta.git)
+
 cd EcoAlerta
-3. Instalar Dependências
+```
+### 3. Instalar Dependências
 Baixe as bibliotecas necessárias listadas no package.json:
 
 Bash
 
+```
 npm install
-4. Configurar Variáveis de Ambiente (.env)
+```
+### 4. Configurar Variáveis de Ambiente (.env)
 Por segurança, o arquivo de configurações não é enviado para o GitHub. Crie um arquivo chamado .env na raiz do projeto e preencha com os dados do seu banco MySQL:
 
 # Configuração do Banco de Dados
-DB_HOST=localhost
+```DB_HOST=localhost
 DB_USER=root
 DB_PASS=SUA_SENHA_AQUI
 DB_NAME=ecoalerta_db
 (Substitua SUA_SENHA_AQUI pela senha do seu MySQL)
-
+```
 Configuração do Banco de Dados
 Abra o seu MySQL Workbench (ou terminal SQL) e execute o script abaixo. Ele criará o banco e todas as tabelas necessárias já atualizadas.
 
 SQL
-
+```
 -- 1. Criação do Banco
 CREATE DATABASE IF NOT EXISTS ecoalerta_db;
 USE ecoalerta_db;
@@ -86,6 +90,7 @@ CREATE TABLE IF NOT EXISTS denuncias (
     data_envio DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES users(id)
 );
+```
 Como criar um Usuário Administrador
 Como o banco começa vazio, siga este passo a passo para acessar o painel de admin:
 
@@ -96,8 +101,9 @@ Vá em "Cadastrar" e crie uma conta comum.
 No MySQL, rode o comando abaixo para transformar essa conta em Admin:
 
 SQL
-
+```
 UPDATE users SET is_admin = 1 WHERE id = 1;
+```
 Executando o Projeto
 Após configurar tudo, inicie o servidor:
 
@@ -109,5 +115,4 @@ O sistema estará disponível em: http://localhost:3000
 ## Autor
 
 **Eduardo Vinicius**
-[Perfil no GitHub](https://github.com/dudusantz)
-[Perfil no LinkedIn](https://www.linkedin.com/in/eduardo-vinicius-35bb56344/)
+[Perfil no GitHub](https://github.com/dudusantz) | [Perfil no LinkedIn](https://www.linkedin.com/in/eduardo-vinicius-35bb56344/)
