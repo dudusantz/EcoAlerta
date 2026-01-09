@@ -1,63 +1,79 @@
-# EcoAlerta
+# 🌱 EcoAlerta
 
-O **EcoAlerta** é uma plataforma web desenvolvida para facilitar a denúncia de crimes e irregularidades ambientais. O sistema conecta cidadãos conscientes a órgãos fiscalizadores, permitindo o envio de denúncias (anônimas ou identificadas) com fotos e localização, além de oferecer um painel administrativo para gestão e resolução dos casos.
-
----
-
-## Tecnologias Utilizadas
-
-O projeto foi construído utilizando a arquitetura **MVC (Model-View-Controller)** com as seguintes tecnologias:
-
-* **Backend:** Node.js e Express
-* **Banco de Dados:** MySQL
-* **Frontend:** EJS (Embedded JavaScript), CSS3 e Bootstrap
-* **Uploads:** Multer (Gestão de imagens)
-* **Autenticação:** Sessões e Criptografia de senhas
-* **APIs e Integrações:** Geolocalização (GPS do Navegador), Nodemailer (Envio de E-mails) e Boxicons
+**EcoAlerta** é uma plataforma web desenvolvida como **projeto acadêmico** com o objetivo de facilitar a denúncia de crimes e irregularidades ambientais. O sistema conecta cidadãos conscientes a órgãos fiscalizadores, permitindo o envio de denúncias (anônimas ou identificadas) com fotos e localização, além de oferecer um painel administrativo para gestão e resolução dos casos.
 
 ---
 
-## Instalação e Configuração
+## 🚀 Tecnologias Utilizadas
 
-Siga os passos abaixo para rodar o projeto na sua máquina local.
+Este projeto foi construído seguindo a arquitetura **MVC (Model-View-Controller)**:
+
+-   **Backend:** [Node.js](https://nodejs.org/) e [Express](https://expressjs.com/).
+-   **Banco de Dados:** MySQL (via `mysql2`).
+-   **Frontend:** EJS (Embedded JavaScript), CSS3 e Bootstrap.
+-   **Autenticação:** Gestão de sessões (`express-session`) e criptografia de senhas (`bcrypt`).
+-   **Uploads:** Multer (para upload de imagens das denúncias).
+-   **E-mail:** Nodemailer (para notificações).
+-   **Outros:** Geolocalização (API do navegador) e Boxicons.
+
+---
+
+## ✨ Funcionalidades
+
+### Área Pública (Cidadão)
+-   📢 **Denúncias:** Envio de denúncias ambientais com título, descrição e foto.
+-   📍 **Geolocalização:** Captura automática da localização no momento da denúncia.
+-   🕵️ **Anonimato:** Opção de enviar denúncias sem se identificar.
+-   🔐 **Autenticação:** Cadastro e login de usuários para acompanhamento.
+
+### Área Administrativa
+-   📊 **Gestão de Denúncias:** Visualização de todas as ocorrências.
+-   ✅ **Status:** Aprovação, rejeição ou marcação de denúncias como resolvidas.
+
+---
+
+## 📦 Instalação e Configuração
+
+Siga os passos abaixo para rodar o projeto localmente.
 
 ### 1. Pré-requisitos
-* [Node.js](https://nodejs.org/) instalado.
-* [MySQL Workbench](https://www.mysql.com/products/workbench/) (ou outro cliente SQL) instalado.
-* Git instalado.
+Certifique-se de ter instalado:
+-   [Node.js](https://nodejs.org/)
+-   MySQL Workbench (ou outro cliente SQL)
+-   Git
 
 ### 2. Clonar o Repositório
-Abra o terminal e rode:
 
 ```bash
 git clone [https://github.com/dudusantz/EcoAlerta.git](https://github.com/dudusantz/EcoAlerta.git)
-```
-```
 cd EcoAlerta
+
 ```
+
 ### 3. Instalar Dependências
-Baixe as bibliotecas necessárias listadas no package.json:
 
-Bash
-
-```
+```bash
 npm install
-```
-### 4. Configurar Variáveis de Ambiente (.env)
-Por segurança, o arquivo de configurações não é enviado para o GitHub. Crie um arquivo chamado .env na raiz do projeto e preencha com os dados do seu banco MySQL:
 
-# Configuração do Banco de Dados
-```DB_HOST=localhost
+```
+
+### 4. Configurar Variáveis de Ambiente
+
+Crie um arquivo chamado `.env` na raiz do projeto e preencha com as credenciais do seu banco de dados MySQL:
+
+```env
+DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=SUA_SENHA_AQUI
+DB_PASSWORD=SUA_SENHA_DO_MYSQL
 DB_NAME=ecoalerta_db
-(Substitua SUA_SENHA_AQUI pela senha do seu MySQL)
-```
-Configuração do Banco de Dados
-Abra o seu MySQL Workbench (ou terminal SQL) e execute o script abaixo. Ele criará o banco e todas as tabelas necessárias já atualizadas.
 
-SQL
 ```
+
+### 5. Configurar o Banco de Dados
+
+Abra seu cliente SQL (como o MySQL Workbench) e execute o script abaixo para criar o banco e as tabelas:
+
+```sql
 -- 1. Criação do Banco
 CREATE DATABASE IF NOT EXISTS ecoalerta_db;
 USE ecoalerta_db;
@@ -91,30 +107,45 @@ CREATE TABLE IF NOT EXISTS denuncias (
     data_envio DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES users(id)
 );
+
 ```
-Como criar um Usuário Administrador
-Como o banco começa vazio, siga este passo a passo para acessar o painel de admin:
 
-Rode o projeto e abra no navegador.
+### 6. Criar um Usuário Administrador
 
-Vá em "Cadastrar" e crie uma conta comum.
+Como o banco inicia vazio, siga estes passos para criar o primeiro admin:
 
-No MySQL, rode o comando abaixo para transformar essa conta em Admin:
+1. Rode o projeto e acesse `http://localhost:3000`.
+2. Vá em "Cadastrar" e crie uma conta comum.
+3. No seu banco de dados MySQL, execute o comando abaixo para dar permissão de admin ao usuário criado (assumindo que seja o primeiro):
 
-SQL
-```
+```sql
 UPDATE users SET is_admin = 1 WHERE id = 1;
-```
-Executando o Projeto
-Após configurar tudo, inicie o servidor:
 
-Bash
 ```
+
+---
+
+## ▶️ Executando o Projeto
+
+Após configurar o banco e as variáveis de ambiente:
+
+```bash
+npm start
+# ou
 node server.js
+
 ```
-O sistema estará disponível em: http://localhost:3000
 
-## Autor
+Acesse em seu navegador: `http://localhost:3000`
 
-**Eduardo Vinicius**
+---
+
+## 🎓 Sobre
+
+Este projeto foi desenvolvido por **Eduardo Vinicius** como parte de um trabalho acadêmico.
+
 [Perfil no GitHub](https://github.com/dudusantz) | [Perfil no LinkedIn](https://www.linkedin.com/in/eduardo-vinicius-35bb56344/)
+
+```
+
+```
